@@ -11,103 +11,118 @@ import Input from "@/components/Input";
 import { supabase } from "@/db/supabase";
 import { usingContext } from "@/context/UserContext";
 
-
 const Auth = () => {
+  const router = useRouter();
 
-    const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const { user } = usingContext();
+  const [defaultImg, setDefaultImg] = useState("");
+  const [waitingConfirmation, setWaitingConfirmation] = useState(false);
 
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-    const { user } = usingContext();
-    const [defaultImg, setDefaultImg] = useState('')
-  
-    const [variant, setVariant] = useState("login");
-  
-    const toggleVariant = useCallback(() => {
-      setVariant((currentVariant) =>
-        currentVariant === "login" ? "register" : "login"
-      );
-    }, []);
+  const [variant, setVariant] = useState("login");
 
-    const getDefaultImg = async () => {
-        const {data} = await supabase.storage
-          .from("images")
-          .getPublicUrl("default-red.png");    
-          setDefaultImg(data.publicUrl)
-      };
-    
-  
-    const creatingDefaultProfile = async () => {
-      const {data, error} = await supabase.from("profiles").insert({
-        ownerId: user?.userId,
-        profileName: user?.Name,
-        profileImg: defaultImg,
-      });
-      if(error){
-        console.log(error)
-      }
-    };
-  
-    const login = async () => {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        console.log(error);
-      }
-    };
-  
-    const register = async () => {
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          emailRedirectTo: "http://localhost:3000/profiles",
-          data: {
-            name: name,
-          },
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) =>
+      currentVariant === "login" ? "register" : "login"
+    );
+  }, []);
+
+  const getDefaultImg = async () => {
+    const { data } = await supabase.storage
+      .from("images")
+      .getPublicUrl("default-red.png");
+    setDefaultImg(data.publicUrl);
+    console.log(data.publicUrl);
+  };
+
+  const creatingUser = async () => {
+    const { data, error } = await supabase.from("users").insert({
+      userId: user?.userId,
+      Name: name,
+      email: email,
+    });
+    if (error) {
+      console.log(error);
+    }
+  };
+
+  const login = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      console.log(error);
+    }
+  };
+
+  const register = async () => {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        emailRedirectTo: "http://localhost:3000/profiles",
+        data: {
+          name: name,
         },
-      });
-  
-      if (error) {
-        console.log(error)
-      } else {
-        if(defaultImg && user){
-            creatingDefaultProfile()
-        }
-      }
+      },
+    });
 
-      router.push('/confirmEmail')
-    };
-  
-    const GithubSign = async () => {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-      });
-  
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    };
+    if (error) {
+      console.log(error);
+    }
 
-    useEffect(()=>{
-        getDefaultImg()
-    },[])
-  
+    if (data.user !== null) {
+      const result = await supabase.from("profiles").insert({
+        ownerId: data?.user?.id,
+      });
+      console.log(result.data);
+      if (result.error) {
+        console.log(result.error);
+      }
+    }
+
+    const userResult = await supabase.from("users").insert({
+      userId: data.user?.id,
+      Name: name,
+      email: email,
+    });
+    console.log(userResult.data);
+    if (userResult.error) {
+      console.log(userResult.error);
+    }
+    console.log(data);
+
+    setWaitingConfirmation(true);
+  };
+
+  const GithubSign = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+    });
+
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    getDefaultImg();
+  }, []);
 
   return (
     <div className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
-      <div className="bg-black w-full h-full  lg:bg-opacity-50">
+      <div className="w-full h-full bg-black lg:bg-opacity-50">
         <nav className="px-12 py-5">
           <img src="/images/logo.png" className="h-12" alt="Logo" />
         </nav>
         <div className="flex justify-center">
-          <div className="bg-black bg-opacity-70  px-12 py-10 self-center mt-2 lg:w-2/5  lg:max-w-ld rounded-md w-full">
-            <h2 className="text-white text-4xl mb-8 font-semibold">
+          <div className="self-center w-full px-12 py-10 mt-2 bg-black rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-ld">
+            <h2 className="mb-8 text-4xl font-semibold text-white">
               {variant === "login" ? "Sign in" : "Register"}
             </h2>
             <div className="flex flex-col gap-4">
@@ -137,40 +152,47 @@ const Auth = () => {
             </div>
             <button
               onClick={variant === "login" ? login : register}
-              className="bg-red-600 py-3 text-white rounded-md w-full mt-4 hover:bg-red-700 transition"
+              className="w-full py-3 mt-4 text-white transition bg-red-600 rounded-md hover:bg-red-700"
             >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
-            <div className="flex flex-row items-center gap-4 mt-6 justify-center">
+            <div className="flex flex-row items-center justify-center gap-4 mt-6">
               <div
                 onClick={() => signIn("google", { callbackUrl: "/profiles" })}
-                className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition"
+                className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
               >
                 <FcGoogle size={32} />
               </div>
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
+              <div className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80">
                 <button onClick={GithubSign}>
                   <FaGithub size={32} />
                 </button>
               </div>
             </div>
-            <p className="text-neutral-500 mt-6">
+
+            <p className="mt-6 text-neutral-500">
               {variant === "login"
                 ? "First time using Netflix?"
                 : "Already have an account?"}
               <span
                 onClick={toggleVariant}
-                className="text-white ml-1 hover:underline cursor-pointer"
+                className="ml-1 text-white cursor-pointer hover:underline"
               >
                 {variant === "login" ? "Create an account" : "Login"}
               </span>
-              .
             </p>
           </div>
         </div>
+        {waitingConfirmation && (
+          <div className="w-full m-auto mt-2 bg-black rounded-md p-7 bg-opacity-70 lg:w-2/5 lg:max-w-lg">
+            <span className="text-gray-300">
+              Please confirm your email address to continue
+            </span>
+          </div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Auth
+export default Auth;

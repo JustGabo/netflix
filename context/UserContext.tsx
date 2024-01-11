@@ -3,7 +3,6 @@ import React, {useState, useEffect, useContext, createContext} from 'react'
 import {User} from '@/types/index'
 import { supabase } from '@/db/supabase'
 import { useRouter } from 'next/navigation'
-import { SupabaseAuthClient } from '@supabase/supabase-js/dist/module/lib/SupabaseAuthClient'
 
 interface Props{
     children: React.ReactNode
@@ -30,11 +29,13 @@ const UserContextProvider = ({children}: Props) => {
     const {data, error} = await supabase.auth.getUser()
     if(error){
       console.log(error)
-    }else{
-      console.log(data.user)
-      const User = await supabase.from('users').select("*").eq('userId', data.user.id)
-      console.log(User)
     }
+    
+    if(data){
+      console.log(data)
+      const user = await supabase.from('users').select("*").eq('userId', data?.user?.id)
+      console.log(user)
+    } 
   }
 
   
@@ -52,12 +53,12 @@ const UserContextProvider = ({children}: Props) => {
     // }
       if (e === 'SIGNED_IN') {
       // handle sign in event
-      setRecharge(true)
+      setRecharge(!recharge)
       router.push('/profiles')
 
     } else if (e === 'SIGNED_OUT') {
       // handle sign out event
-      setRecharge(true)
+      setRecharge(!recharge)
       router.push('/auth')
     } else if (e === 'PASSWORD_RECOVERY') {
       // handle password recovery event
