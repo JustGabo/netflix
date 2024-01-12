@@ -1,47 +1,53 @@
-import React, {useState, useEffect, useContext, createContext} from 'react'
+import React, { useState, useEffect, useContext, createContext } from "react";
 
-import {User} from '@/types/index'
-import { supabase } from '@/db/supabase'
-import { useRouter } from 'next/navigation'
+// import { User } from "@/types/index";
+import { supabase } from "@/db/supabase";
+import { useRouter } from "next/navigation";
+import {User} from '@supabase/supabase-js'
 
-interface Props{
-    children: React.ReactNode
+interface Props {
+  children: React.ReactNode;
 }
 
 interface UserContextState {
-    user: User | null
+  user: User | null;
 }
 
 const initialState = {
-  user: null
-}
+  user: null,
+};
 
-export const UserContext = createContext<UserContextState>(initialState)
+export const UserContext = createContext<UserContextState>(initialState);
 
-const UserContextProvider = ({children}: Props) => {
+const UserContextProvider = ({ children }: Props) => {
+  const [user, setUser] = useState<User | null >(null);
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const [user, setUser] = useState<User | null>(null)
-  const router = useRouter()
-  const [recharge, setRecharge] = useState(false)
-
-  
-  const getUser = async () =>{
-    const {data, error} = await supabase.auth.getUser()
-    if(error){
-      console.log(error)
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (data) {
+      setUser(data.user)
+      setLoading(false)
     }
-    
-    if(data){
-      console.log(data)
-      const user = await supabase.from('users').select("*").eq('userId', data?.user?.id)
-      console.log(user)
-    } 
-  }
 
-  
+    // if (data) {
+    //   console.log(data);
+    //   const { data: UserData, error } = await supabase
+    //     .from("users")
+    //     .select("*")
+    //     .eq("email", data.user?.email);
+    //   if (UserData) {
+    //     console.log(UserData);
+    //     setUser(UserData);
+    //   } else {
+    //     console.log(error);
+    //   }
+    // }
+  };
 
-  const change = supabase.auth.onAuthStateChange((e, session)=> {
-    console.log(e, session)
+  const change = supabase.auth.onAuthStateChange((e, session) => {
+    console.log(e, session);
 
     // if(user){
     //   router.push('/')
@@ -51,43 +57,55 @@ const UserContextProvider = ({children}: Props) => {
     //   // handle initial session
     //   router.push('/auth')
     // }
-      if (e === 'SIGNED_IN') {
+    if (e === "SIGNED_IN") {
       // handle sign in event
-      setRecharge(!recharge)
-      router.push('/profiles')
-
-    } else if (e === 'SIGNED_OUT') {
+      // getUser()
+      router.push("/profiles");
+    } else if (e === "SIGNED_OUT") {
       // handle sign out event
-      setRecharge(!recharge)
-      router.push('/auth')
-    } else if (e === 'PASSWORD_RECOVERY') {
+      router.push("/auth");
+    } else if (e === "PASSWORD_RECOVERY") {
       // handle password recovery event
-    } else if (e === 'TOKEN_REFRESHED') {
+    } else if (e === "TOKEN_REFRESHED") {
       // handle token refreshed event
-    } else if (e === 'USER_UPDATED') {
+    } else if (e === "USER_UPDATED") {
       // handle user updated event
     }
-  })
+  });
 
+  // useEffect(() => {
+  //   if (user) {
+  //     const getProfiles = async () => {
+  //       const { data, error } = await supabase
+  //         .from("profiles")
+  //         .select("*")
+  //         .eq("ownerEmail", user?.email);
+  //       if (data) {
+  //         console.log(data);
+  //         // setProfiles(data);
+  //       } else {
+  //         console.log(error);
+  //       }
+  //     };
+  //     getProfiles()
+  //   }
+  // }, [user]);
 
-  useEffect(()=>{
-    getUser()
-    change
-  },[recharge])
+  useEffect(() => {
+    getUser();
+    // change;
+  }, []);
 
   const value = {
-    user
-  }
+    user,
+  };
 
-  return (
-    <UserContext.Provider value={value}>{children}</UserContext.Provider>
-  )
-}
+  return <UserContext.Provider value={value}>{!loading && children}</UserContext.Provider>;
+};
 
-export default UserContextProvider
+export default UserContextProvider;
 
-
-export const usingContext = ()=>{
-  const context = useContext(UserContext)
-  return context
-}
+export const usingContext = () => {
+  const context = useContext(UserContext);
+  return context;
+};

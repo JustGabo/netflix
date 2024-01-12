@@ -17,9 +17,9 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const { user } = usingContext();
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
+  const {user} = usingContext()
 
   const [variant, setVariant] = useState("login");
 
@@ -29,24 +29,31 @@ const Auth = () => {
     );
   }, []);
 
-  const getDefaultImg = async () => {
-    const { data } = await supabase.storage
+  const redirecting = async ()=>{
+    const {data:{user}} = await supabase.auth.getUser()
+    if(user){
+      router.push('/')
+    }
+  }
+
+  const getDefaultImg = () => {
+    const { data } = supabase.storage
       .from("images")
       .getPublicUrl("default-red.png");
     setDefaultImg(data.publicUrl);
-    console.log(data.publicUrl);
   };
 
   const creatingUser = async () => {
     const { data, error } = await supabase.from("users").insert({
-      userId: user?.userId,
-      Name: name,
+      name: name,
       email: email,
     });
     if (error) {
       console.log(error);
     }
   };
+
+ 
 
   const login = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -70,30 +77,44 @@ const Auth = () => {
       },
     });
 
-    if (error) {
-      console.log(error);
-    }
-
     if (data.user !== null) {
       const result = await supabase.from("profiles").insert({
-        ownerId: data?.user?.id,
+        profileName: name,
+        profileImg: defaultImg,
+        ownerEmail: email
       });
-      console.log(result.data);
       if (result.error) {
         console.log(result.error);
       }
+      creatingUser()
+    } else {
+      return console.log(error);
     }
 
-    const userResult = await supabase.from("users").insert({
-      userId: data.user?.id,
-      Name: name,
-      email: email,
-    });
-    console.log(userResult.data);
-    if (userResult.error) {
-      console.log(userResult.error);
-    }
-    console.log(data);
+    
+    // else{
+    //   console.log(data)
+    //   const {data: userData,error} = await supabase.from("users").insert({
+    //     name: name,
+    //     email: email
+    //   })
+    //   if(userData){
+    //     console.log(userData)
+    //   }else{
+    //     console.log(error)
+    //   }
+    // }
+
+    // const userResult = await supabase.from("users").insert({
+    //   userId: data.user?.id,
+    //   Name: name,
+    //   email: email,
+    // });
+    // console.log(userResult.data);
+    // if (userResult.error) {
+    //   console.log(userResult.error);
+    // }
+    // console.log(data);
 
     setWaitingConfirmation(true);
   };
@@ -112,7 +133,8 @@ const Auth = () => {
 
   useEffect(() => {
     getDefaultImg();
-  }, []);
+    redirecting()
+  }, [user]);
 
   return (
     <div className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">

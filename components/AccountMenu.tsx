@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { usingAccountContext } from "@/context/AccountContext";
 
 const AccountMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const {account} = usingAccountContext()
 
   const Icon = isOpen ? ChevronUp : ChevronDown;
 
@@ -34,7 +36,7 @@ const AccountMenu = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem className="flex gap-2 p-3 cursor-pointer hover:bg-transparent">
             <img className="h-6" src="/images/profile-red.png" alt="" />
-            <span className="text-sm">User1</span>
+            <span className="text-sm">{account?.name}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-zinc-500" />

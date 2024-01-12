@@ -1,7 +1,7 @@
 "use client";
 import { supabase } from "@/db/supabase";
 import { InfoIcon, PlayIcon, PlusCircleIcon } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,24 +9,52 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { BsPlayBtn, BsPlayFill } from "react-icons/bs";
+import { BsPlayFill } from "react-icons/bs";
+import { Movies } from "@/types/index";
+import { useRouter } from "next/navigation";
 
 const Billboard = () => {
-  const { data } = supabase.storage.from("movies").getPublicUrl("coraline.mp4");
+  const router = useRouter()
+  const [active, setActive] = useState(true);
+  const [movies, setMovies] = useState<Movies[]>([]);
+  const [index, setIndex] = useState<number>()
+  const randomMovie = () => setIndex(Math.floor(Math.random()*4))
+  const getMovies = async () => {
+    const { data, error } = await supabase.from("movies").select("*");
+    if (data) {
+      setMovies(data!);
+    } else {
+
+      console.log(error);
+    }
+  };
+
+  const redirecting = async ()=>{
+    const {data:{user}} = await supabase.auth.getUser()
+    if(!user){
+      router.push('/auth')
+    }
+  }
 
   useEffect(() => {
-    console.log(data.publicUrl);
-  }, [data]);
+    getMovies()
+    randomMovie()
+    redirecting()
+  }, []);
+
+  useEffect(()=>{
+    console.log(movies[index!])
+  },[index])
 
   return (
     <div className="relative h-[56.25vw]">
-      {data.publicUrl && (
+      {active && (
         <video
           className="w-full h-[56.25vw] object-cover brightness-[60%]"
           autoPlay
           muted
           loop
-          src={data.publicUrl}
+          src="https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z"
         ></video>
       )}
       <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16 ">
@@ -41,7 +69,7 @@ const Billboard = () => {
         </p>
         <div className="flex flex-row overflow-x-hidden items-center gap-3 mt-3 md:mt-4">
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <button className="flex flex-row items-center w-auto px-2 py-1 text-xs font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
                 <InfoIcon className="mr-1 text-white" />
                 More info
@@ -55,7 +83,7 @@ const Billboard = () => {
                     autoPlay
                     muted
                     loop
-                    src={data.publicUrl}
+                    src="https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z"
                   ></video>
                   <div className="absolute bottom-[10%] left-10">
                     <p className="text-white text-3xl md:text-4xl h-full lg:text-5xl font-bold mb-4">
