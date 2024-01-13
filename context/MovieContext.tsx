@@ -39,7 +39,7 @@ const MovieUrlContextProvider = ({children}: Props) => {
 export default MovieUrlContextProvider
 
 
-export const usingMovieUrlContext = ()=>{
+export const useMovieUrlContext = ()=>{
     const context = useContext(MovieUrlContext)
     return context
 }

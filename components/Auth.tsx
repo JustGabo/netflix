@@ -9,7 +9,7 @@ import { FaGithub } from "react-icons/fa";
 
 import Input from "@/components/Input";
 import { supabase } from "@/db/supabase";
-import { usingContext } from "@/context/UserContext";
+import { useUserContext } from "@/context/UserContext";
 
 const Auth = () => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
-  const {user} = usingContext()
+  const {user} = useUserContext()
 
   const [variant, setVariant] = useState("login");
 

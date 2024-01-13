@@ -60,7 +60,7 @@ const UserContextProvider = ({ children }: Props) => {
     if (e === "SIGNED_IN") {
       // handle sign in event
       // getUser()
-      router.push("/profiles");
+      router.push("/");
     } else if (e === "SIGNED_OUT") {
       // handle sign out event
       router.push("/auth");
@@ -105,7 +105,7 @@ const UserContextProvider = ({ children }: Props) => {
 
 export default UserContextProvider;
 
-export const usingContext = () => {
+export const useUserContext = () => {
   const context = useContext(UserContext);
   return context;
 };

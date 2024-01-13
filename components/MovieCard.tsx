@@ -7,7 +7,7 @@ import {
 
 import {Movie} from '@/types/index'
 import { useRouter } from "next/navigation";
-import { usingMovieUrlContext } from "@/context/MovieContext";
+import { useMovieUrlContext } from "@/context/MovieContext";
 
 interface MovieCardProps{
   movie: Movie
@@ -17,7 +17,7 @@ interface MovieCardProps{
 const MovieCard = ({movie}: MovieCardProps) => {
 
   const router = useRouter()
-  const {setUrl,setName} = usingMovieUrlContext()
+  const {setUrl,setName} = useMovieUrlContext()
   const [loading, setLoading] = useState(false)
 
 
@@ -78,41 +78,31 @@ const MovieCard = ({movie}: MovieCardProps) => {
       "
         />
         <div
-          className="
-        z-10
-        bg-zinc-800
-        p-2
-        lg:p-4
-        absolute
-        w-full
-        transition
-        shadow-md
-        rounded-b-md
-        "
+          className="absolute z-10 w-full p-2 transition shadow-md bg-zinc-800 lg:p-4 rounded-b-md"
         >
           <div className="flex flex-row items-center gap-3">
             <div
               onClick={()=>{
                 setUrl(movie.url)
                 setName(movie.name)
-                router.push("/watch")
+                router.push(`/watch/${movie.id}`)
               }}
               className={`cursor-pointer ${loading? 'cursor-not-allowed' : 'cursor-pointer'} w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
             >
-              <BsPlayFill className="text-black w-6 h-6" />
+              <BsPlayFill className="w-6 h-6 text-black" />
             </div>
             {/* <FavoriteButton movieId={data.id} /> */}
             <div
               onClick={() => {}}
-              className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full flex justify-center items-center transition hover:border-neutral-300"
+              className="flex items-center justify-center w-6 h-6 ml-auto transition border-2 border-white rounded-full cursor-pointer group/item lg:w-10 lg:h-10 hover:border-neutral-300"
             >
-              <ChevronDown className="text-white group-hover/item:text-neutral-300 w-4 lg:w-6" />
+              <ChevronDown className="w-4 text-white group-hover/item:text-neutral-300 lg:w-6" />
             </div>
           </div>
-          <p className="text-green-400 font-semibold mt-4">
+          <p className="mt-4 font-semibold text-green-400">
             New <span className="text-white">2023</span>
           </p>
-          <div className="flex flex-row mt-4 gap-2 items-center">
+          <div className="flex flex-row items-center gap-2 mt-4">
             <p className="text-white text-[10px] lg:text-xs">Duration: {movie.duration}</p>
           </div>
           <div className="flex flex-row items-center gap-2 mt-4 text-[8px] text-white lg:text-xs">

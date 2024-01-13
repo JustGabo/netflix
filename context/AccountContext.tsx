@@ -2,32 +2,28 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { Account } from "@/types/index";
 import { supabase } from "@/db/supabase";
-import { usingContext } from "./UserContext";
+import { useUserContext } from "./UserContext";
 
 interface AccountProps {
   children: React.ReactNode;
 }
-
 
 interface AccountState {
   account: Account | null;
 }
 
 const initialState = {
-  account: null
+  account: null,
 };
 
 const AccountContext = createContext<AccountState>(initialState);
 
 const AccountContextProvider = ({ children }: AccountProps) => {
   const [account, setAccount] = useState<Account | null>(null);
-  const { user } = usingContext();
+  const { user } = useUserContext();
 
   const gettingAccount = async () => {
-    const { data } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", user?.email).single();
+    const { data } = await supabase.from("users").select("*").single();
     setAccount(data);
   };
 
@@ -50,7 +46,7 @@ const AccountContextProvider = ({ children }: AccountProps) => {
 
 export default AccountContextProvider;
 
-export const usingAccountContext = () => {
+export const useAccountContext = () => {
   const context = useContext(AccountContext);
   return context;
 };

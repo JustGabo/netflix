@@ -10,11 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { usingAccountContext } from "@/context/AccountContext";
+import { useAccountContext } from "@/context/AccountContext";
+import { useProfilesContext } from "@/context/ProfilesContext";
 
 const AccountMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {account} = usingAccountContext()
+  const { profile, MyProfiles } = useProfilesContext();
 
   const Icon = isOpen ? ChevronUp : ChevronDown;
 
@@ -32,15 +33,29 @@ const AccountMenu = () => {
           <Icon />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-zinc-950 w-36 mt-5 mr-24 border border-zinc-500  text-white">
+      <DropdownMenuContent className="mt-5 mr-24 text-white border bg-zinc-950 w-36 border-zinc-500">
         <DropdownMenuGroup>
           <DropdownMenuItem className="flex gap-2 p-3 cursor-pointer hover:bg-transparent">
-            <img className="h-6" src="/images/profile-red.png" alt="" />
-            <span className="text-sm">{account?.name}</span>
+            <img className="h-6" src={profile?.profileImg} alt="" />
+            <span className="text-sm">{profile?.profileName}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-zinc-500" />
-        <DropdownMenuItem className="text-xs p-3 cursor-pointer">
+        <DropdownMenuGroup>
+          {MyProfiles?.map((profile) => {
+            return (
+              <DropdownMenuItem
+                key={profile.id}
+                className="flex gap-2 p-3 cursor-pointer hover:bg-transparent"
+              >
+                <img className="h-6" src={profile?.profileImg} alt="" />
+                <span className="text-sm">{profile?.profileName}</span>
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator className="bg-zinc-500" />
+        <DropdownMenuItem className="p-3 text-xs cursor-pointer">
           <button onClick={signOut}>Sign out of Nextflix</button>
         </DropdownMenuItem>
       </DropdownMenuContent>
