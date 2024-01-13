@@ -1,4 +1,3 @@
-"use client";
 import { supabase } from "@/db/supabase";
 import React, { useState } from "react";
 import {
@@ -10,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useAccountContext } from "@/context/AccountContext";
 import { useProfilesContext } from "@/context/ProfilesContext";
 
 const AccountMenu = () => {

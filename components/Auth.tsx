@@ -1,8 +1,6 @@
 "use client";
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { NextPageContext } from "next";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -19,7 +17,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
-  const {user} = useUserContext()
+  const { user } = useUserContext();
 
   const [variant, setVariant] = useState("login");
 
@@ -29,12 +27,14 @@ const Auth = () => {
     );
   }, []);
 
-  const redirecting = async ()=>{
-    const {data:{user}} = await supabase.auth.getUser()
-    if(user){
-      router.push('/')
+  const redirecting = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      router.push("/");
     }
-  }
+  };
 
   const getDefaultImg = () => {
     const { data } = supabase.storage
@@ -52,8 +52,6 @@ const Auth = () => {
       console.log(error);
     }
   };
-
- 
 
   const login = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -81,40 +79,15 @@ const Auth = () => {
       const result = await supabase.from("profiles").insert({
         profileName: name,
         profileImg: defaultImg,
-        ownerEmail: email
+        ownerEmail: email,
       });
       if (result.error) {
         console.log(result.error);
       }
-      creatingUser()
+      creatingUser();
     } else {
       return console.log(error);
     }
-
-    
-    // else{
-    //   console.log(data)
-    //   const {data: userData,error} = await supabase.from("users").insert({
-    //     name: name,
-    //     email: email
-    //   })
-    //   if(userData){
-    //     console.log(userData)
-    //   }else{
-    //     console.log(error)
-    //   }
-    // }
-
-    // const userResult = await supabase.from("users").insert({
-    //   userId: data.user?.id,
-    //   Name: name,
-    //   email: email,
-    // });
-    // console.log(userResult.data);
-    // if (userResult.error) {
-    //   console.log(userResult.error);
-    // }
-    // console.log(data);
 
     setWaitingConfirmation(true);
   };
@@ -133,7 +106,7 @@ const Auth = () => {
 
   useEffect(() => {
     getDefaultImg();
-    redirecting()
+    redirecting();
   }, [user]);
 
   return (

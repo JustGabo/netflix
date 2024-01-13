@@ -37,6 +37,7 @@ const CurrentProfileContextProvider = ({ children }: Props) => {
 
   useEffect(() => {
     getProfiles();
+    console.log(user)
   }, [user]);
 
   useEffect(() => {

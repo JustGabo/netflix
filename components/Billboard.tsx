@@ -4,14 +4,9 @@ import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
 import { BsPlayFill } from "react-icons/bs";
-import { Movie } from "@/types/index";
-import { useRouter } from "next/navigation";
-import { useProfilesContext } from "@/context/ProfilesContext";
 
 const Billboard = async () => {
   const { data, error } = await supabase.from("movies").select("*");

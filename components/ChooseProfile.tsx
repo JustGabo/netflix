@@ -4,6 +4,7 @@ import { useUserContext } from "@/context/UserContext";
 import { Profile } from "@/types";
 import { useRouter } from "next/navigation";
 import { useProfilesContext } from "@/context/ProfilesContext";
+import { supabase } from "@/db/supabase";
 
 const ChooseProfile = () => {
   const { user } = useUserContext();
@@ -12,9 +13,12 @@ const ChooseProfile = () => {
   // const [myProfiles, setMyProfiles] = useState<Profile[] | undefined>([]);
 
 
-  const redirecting = () => {
-    if (!user) {
-      router.push("/auth");
+  const redirecting = async () => {
+    const {data:{user}} = await supabase.auth.getUser()
+    if(!user){
+      router.push('/auth')
+    }else{
+      console.log(user)
     }
   };
 
@@ -22,15 +26,6 @@ const ChooseProfile = () => {
     redirecting();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(
-  //     allprofiles?.filter((profile) => profile.ownerEmail === user?.email)
-  //   );
-  //   setMyProfiles(
-  //     allprofiles?.filter((profile) => profile.ownerEmail === user?.email)
-  //   );
-  //   console.log(myProfiles);
-  // }, [allprofiles, user]);
 
   return (
     <div className="flex items-center justify-center h-full">
@@ -42,12 +37,13 @@ const ChooseProfile = () => {
           {MyProfiles?.map((profile) => {
             return (
               <div
+              
                 key={profile.id}
                 onClick={() => {
                   setProfile(profile);
                   setTimeout(() => {
                     router.push("/");
-                  }, 2000);
+                  }, 1000);
                 }}
               >
                 <div className="flex-row w-32 mx-auto group ">

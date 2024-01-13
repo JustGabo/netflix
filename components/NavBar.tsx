@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import NavBarItem from "./NavBarItem";
 import DropDownMenu from "./DropDownMenu";
 import { BsSearch, BsBell } from "react-icons/bs";
-import AccountMenu from "./AccountMenu";
-import { useProfilesContext } from "@/context/ProfilesContext";
+import NavBarRightSide from "./NavBarRightSide";
 
 const TOP_OFFSET = 66
 
@@ -12,7 +11,6 @@ const TOP_OFFSET = 66
 const NavBar = () => {
 
   const [showBackground, SetShowBackground] = useState(false)
-  const {profile} = useProfilesContext()
 
   useEffect(()=>{
     const handleScroll = ()=>{
@@ -52,12 +50,7 @@ const NavBar = () => {
           <div className="text-gray-200 transition cursor-pointer hover:text-gray-400">
             <BsBell />
           </div>
-          <div className="relative flex flex-row items-center gap-2 cursor-pointer">
-            <div className="w-6 h-6 overflow-hidden rounded-md lg:w-10 lg:h-10">
-              <img src={profile?.profileImg} alt="" />
-            </div>
-            <AccountMenu />
-          </div>
+          <NavBarRightSide/>
         </div>
       </div>
     </nav>
