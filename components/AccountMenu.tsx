@@ -1,4 +1,5 @@
-import { supabase } from "@/db/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import React, { useState } from "react";
 import {
   DropdownMenu,
@@ -10,10 +11,14 @@ import {
 } from "./ui/dropdown-menu";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useProfilesContext } from "@/context/ProfilesContext";
+import { useRouter } from "next/navigation";
 
 const AccountMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { profile, MyProfiles } = useProfilesContext();
+  const router = useRouter();
+  
+  const supabase = createClientComponentClient();
 
   const Icon = isOpen ? ChevronUp : ChevronDown;
 
@@ -22,6 +27,7 @@ const AccountMenu = () => {
     if (error) {
       console.log(error);
     }
+    router.refresh();
   };
 
   return (

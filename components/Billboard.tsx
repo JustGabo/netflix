@@ -1,22 +1,20 @@
 import { supabase } from "@/db/supabase";
-import { InfoIcon, PlayIcon, PlusCircleIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { InfoIcon,  PlusCircleIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "./ui/dialog";
-import { BsPlayFill } from "react-icons/bs";
+import GoToMovieFromModal from "./GoToMovieFromModal";
 
 const Billboard = async () => {
   const { data, error } = await supabase.from("movies").select("*");
 
-  let randomUrl = data![Math.floor(Math.random() * data!.length)].url;
-
-  if (error) {
-    randomUrl =
-      "https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z";
-  }
+  let randomMovie = data![Math.floor(Math.random() * data!.length)];
+  // if (error) {
+  //   randomUrl =
+  //     "https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z";
+  // }
 
   return (
     <div className="relative h-[56.25vw]">
@@ -25,18 +23,15 @@ const Billboard = async () => {
         autoPlay
         muted
         loop
-        src={randomUrl}
+        src={randomMovie.url}
       ></video>
 
       <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16 ">
-        <p className="text-white text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
-          Testing movie title
-        </p>
-        <p className=" text-white text-[8px] md:text-lg mt-3 md:mt-8 w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi
-          perferendis expedita accusantium sapiente recusandae. Itaque ipsam
-          nulla quisquam sapiente architecto officiis in dicta et aliquam,
-          voluptatibus voluptates quam nesciunt deleniti.
+        <h1 className="text-white text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
+          {randomMovie.name}
+        </h1>
+        <p className=" text-white text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
+          {randomMovie.descriptipon}
         </p>
         <div className="flex flex-row items-center gap-3 mt-3 overflow-x-hidden md:mt-4">
           <Dialog>
@@ -54,17 +49,14 @@ const Billboard = async () => {
                     autoPlay
                     muted
                     loop
-                    src="https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z"
+                    src={randomMovie.url}
                   ></video>
                   <div className="absolute bottom-[10%] left-10">
                     <p className="h-full mb-4 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-                      title
+                      {randomMovie.name}
                     </p>
                     <div className="flex flex-row items-center gap-3">
-                      <button className="flex items-center w-20 p-2 font-semibold text-black transition duration-150 bg-white rounded-md hover:opacity-50">
-                        <BsPlayFill className="w-5 h-5" />
-                        Play
-                      </button>
+                      <GoToMovieFromModal id={randomMovie.id}/>
                       <button className="transition duration-150 hover:opacity-50">
                         <PlusCircleIcon className="w-8 h-8 font-light text-white" />
                       </button>
@@ -75,14 +67,10 @@ const Billboard = async () => {
                   <span className="text-xs font-semibold text-green-300">
                     New
                   </span>
-                  <span className="text-xs">15 mins</span>
+                  <span className="text-xs">{randomMovie.duration}</span>
                   <span className="text-xs">Si-fi</span>
                   <p className="text-sm">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Eaque aspernatur, provident harum consequuntur voluptate,
-                    iste repellat debitis sequi perferendis voluptatibus animi
-                    enim porro esse numquam fugiat rerum temporibus! Expedita,
-                    ipsam!
+                    {randomMovie.descriptipon}
                   </p>
                 </div>
               </div>

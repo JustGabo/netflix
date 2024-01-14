@@ -31,7 +31,7 @@ const CurrentProfileContextProvider = ({ children }: Props) => {
     const { data } = await supabase 
       .from("profiles")
       .select("*")
-      .eq("ownerEmail", user?.email);
+      .eq("ownerEmail", 'ovallegabriel123@gmail.com');
     setMyProfiles(data);
   };
 

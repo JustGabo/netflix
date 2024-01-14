@@ -1,8 +1,17 @@
-
+import {createServerComponentClient} from '@supabase/auth-helpers-nextjs'  
+import {cookies} from 'next/headers'
 import AuthPage from '@/components/Auth'
+import { redirect } from 'next/navigation';
 
 
-const Auth = () => {
+const Auth = async () => {
+
+  const supabase = createServerComponentClient({cookies})
+  const {data:{session}} = await supabase.auth.getSession()
+  
+  if(session){
+    redirect('/profiles')
+  }
 
   return (
     <AuthPage/>    

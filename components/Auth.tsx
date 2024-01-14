@@ -1,4 +1,5 @@
 "use client";
+import {createClientComponentClient} from '@supabase/auth-helpers-nextjs'
 import { useCallback, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -6,11 +7,11 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 import Input from "@/components/Input";
-import { supabase } from "@/db/supabase";
 import { useUserContext } from "@/context/UserContext";
 
 const Auth = () => {
   const router = useRouter();
+  const supabase = createClientComponentClient()
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -26,15 +27,6 @@ const Auth = () => {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
-
-  const redirecting = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      router.push("/");
-    }
-  };
 
   const getDefaultImg = () => {
     const { data } = supabase.storage
@@ -61,6 +53,7 @@ const Auth = () => {
     if (error) {
       console.log(error);
     }
+    router.refresh()
   };
 
   const register = async () => {
@@ -68,13 +61,13 @@ const Auth = () => {
       email: email,
       password: password,
       options: {
-        emailRedirectTo: "http://localhost:3000/profiles",
+        emailRedirectTo: `${location.origin}/auth/callback`,
         data: {
           name: name,
         },
       },
     });
-
+    
     if (data.user !== null) {
       const result = await supabase.from("profiles").insert({
         profileName: name,
@@ -82,7 +75,7 @@ const Auth = () => {
         ownerEmail: email,
       });
       if (result.error) {
-        console.log(result.error);
+        return console.log(result.error);
       }
       creatingUser();
     } else {
@@ -90,6 +83,7 @@ const Auth = () => {
     }
 
     setWaitingConfirmation(true);
+    router.refresh()
   };
 
   const GithubSign = async () => {
@@ -106,7 +100,6 @@ const Auth = () => {
 
   useEffect(() => {
     getDefaultImg();
-    redirecting();
   }, [user]);
 
   return (
