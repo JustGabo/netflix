@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { Account } from "@/types/index";
 import { supabase } from "@/db/supabase";
-import { useUserContext } from "./UserContext";
+// import { useUserContext } from "./UserContext";
 
 interface AccountProps {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ const AccountContext = createContext<AccountState>(initialState);
 
 const AccountContextProvider = ({ children }: AccountProps) => {
   const [account, setAccount] = useState<Account | null>(null);
-  const { user } = useUserContext();
+  // const { user } = useUserContext();
 
   const gettingAccount = async () => {
     const { data } = await supabase.from("users").select("*").single();
@@ -30,14 +30,6 @@ const AccountContextProvider = ({ children }: AccountProps) => {
   const value = {
     account,
   };
-
-  useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        gettingAccount();
-      }, 2000);
-    }
-  }, [user]);
 
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>

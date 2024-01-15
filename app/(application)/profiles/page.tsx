@@ -1,25 +1,11 @@
-import {createServerComponentClient} from '@supabase/auth-helpers-nextjs'  
-import {cookies} from 'next/headers'
-import ChooseProfile from "@/components/ChooseProfile"
-import { redirect } from 'next/navigation';
+import ChooseProfile from "@/components/ChooseProfile";
 
-const page = async () => {
-
-  const supabase = createServerComponentClient({cookies})
-  const {data:{user}} = await supabase.auth.getUser()
-  
-  if(!user){
-    redirect('/auth')
-  }else{
-    console.log(user)
-  }
-
-
+const ProfilePage = async () => {
   return (
-    <div className='flex items-center h-full justify-center'>
-      <ChooseProfile/>
+    <div className="flex items-center justify-center h-full">
+      <ChooseProfile />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default ProfilePage;

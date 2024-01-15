@@ -7,7 +7,6 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 import Input from "@/components/Input";
-import { useUserContext } from "@/context/UserContext";
 
 const Auth = () => {
   const router = useRouter();
@@ -18,7 +17,6 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
-  const { user } = useUserContext();
 
   const [variant, setVariant] = useState("login");
 
@@ -30,7 +28,7 @@ const Auth = () => {
 
   const getDefaultImg = () => {
     const { data } = supabase.storage
-      .from("images")
+      .from("images/logos")
       .getPublicUrl("default-red.png");
     setDefaultImg(data.publicUrl);
   };
@@ -70,6 +68,7 @@ const Auth = () => {
     
     if (data.user !== null) {
       const result = await supabase.from("profiles").insert({
+        ownerId: data.user.id,
         profileName: name,
         profileImg: defaultImg,
         ownerEmail: email,
@@ -100,7 +99,7 @@ const Auth = () => {
 
   useEffect(() => {
     getDefaultImg();
-  }, [user]);
+  }, []);
 
   return (
     <div className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">

@@ -31,7 +31,7 @@ const Billboard = async () => {
           {randomMovie.name}
         </h1>
         <p className=" text-white text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
-          {randomMovie.descriptipon}
+          {randomMovie.description}
         </p>
         <div className="flex flex-row items-center gap-3 mt-3 overflow-x-hidden md:mt-4">
           <Dialog>
@@ -45,7 +45,7 @@ const Billboard = async () => {
               <div className="flex flex-col bg-red-50">
                 <div className="relative w-full h-72">
                   <video
-                    className="object-cover brightness-[50%]"
+                    className="object-cover h-full brightness-[50%]"
                     autoPlay
                     muted
                     loop
@@ -70,7 +70,7 @@ const Billboard = async () => {
                   <span className="text-xs">{randomMovie.duration}</span>
                   <span className="text-xs">Si-fi</span>
                   <p className="text-sm">
-                    {randomMovie.descriptipon}
+                    {randomMovie.description}
                   </p>
                 </div>
               </div>

@@ -8,6 +8,7 @@ import {
 import {Movie} from '@/types/index'
 import { useRouter } from "next/navigation";
 import { useMovieUrlContext } from "@/context/MovieContext";
+import FavoriteButton from "./FavoriteButton";
 
 interface MovieCardProps{
   movie: Movie
@@ -91,7 +92,8 @@ const MovieCard = ({movie}: MovieCardProps) => {
             >
               <BsPlayFill className="w-6 h-6 text-black" />
             </div>
-            {/* <FavoriteButton movieId={data.id} /> */}
+            
+            <FavoriteButton movie={movie} />
             <div
               onClick={() => {}}
               className="flex items-center justify-center w-6 h-6 ml-auto transition border-2 border-white rounded-full cursor-pointer group/item lg:w-10 lg:h-10 hover:border-neutral-300"

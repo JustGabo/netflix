@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useUserContext } from "./UserContext";
 import { Profile } from "@/types";
 import { supabase } from "@/db/supabase";
 
@@ -22,7 +21,6 @@ const initialState = {
 const CurrentProfileContext = React.createContext<State>(initialState);
 
 const CurrentProfileContextProvider = ({ children }: Props) => {
-  const { user } = useUserContext();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [MyProfiles, setMyProfiles] = useState<Profile[] | null>([]);
@@ -35,14 +33,6 @@ const CurrentProfileContextProvider = ({ children }: Props) => {
     setMyProfiles(data);
   };
 
-  useEffect(() => {
-    getProfiles();
-    console.log(user)
-  }, [user]);
-
-  useEffect(() => {
-    console.log(MyProfiles);
-  }, [MyProfiles]);
 
   const value = {
     profile,

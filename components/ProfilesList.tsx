@@ -1,27 +1,41 @@
 "use client"
-import { useProfilesContext } from "@/context/ProfilesContext";
-import { useUserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import {createClientComponentClient} from '@supabase/auth-helpers-nextjs'
+import useProfileStore from "@/stores/profile";
 
 const ProfilesList = () => {
-  const { setProfile, MyProfiles } = useProfilesContext();
-  const {getUser} = useUserContext()
   const router = useRouter  ();
+  const supabase = createClientComponentClient()
+  const {setSelectedProfile,setUserProfiles, userProfiles} = useProfileStore((state)=> state)
+
+  const getUserAndProfiles = async ()=>{
+    const {data:{user}} = await supabase.auth.getUser()
+
+    if(user){
+      const {data, error} = await supabase.from('profiles').select('*').eq('ownerEmail', user.email)
+      if(error){
+        console.log(error)
+      }else{
+        console.log(data)
+        setUserProfiles(data)
+      }
+    }
+    console.log(user)
+  }
 
   useEffect(()=>{
-    getUser()
-    router.refresh()
+    getUserAndProfiles()
   },[])
 
   return (
     <div className="flex items-center justify-center gap-8 mt-10">
-      {MyProfiles?.map((profile) => {
+      {userProfiles?.map((profile) => {
         return (
           <div
             key={profile.id}
             onClick={() => {
-              setProfile(profile);
+              setSelectedProfile(profile);
               setTimeout(() => {
                 router.push("/");
               }, 1000);

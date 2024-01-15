@@ -10,19 +10,20 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useProfilesContext } from "@/context/ProfilesContext";
 import { useRouter } from "next/navigation";
+import useProfileStore from "@/stores/profile";
 
 const AccountMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { profile, MyProfiles } = useProfilesContext();
   const router = useRouter();
+  const {selectedProfile,userProfiles} = useProfileStore((state)=> state)
   
   const supabase = createClientComponentClient();
 
   const Icon = isOpen ? ChevronUp : ChevronDown;
 
   const signOut = async () => {
+    localStorage.removeItem("profile-storage");
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.log(error);
@@ -40,13 +41,13 @@ const AccountMenu = () => {
       <DropdownMenuContent className="mt-5 mr-24 text-white border bg-zinc-950 w-36 border-zinc-500">
         <DropdownMenuGroup>
           <DropdownMenuItem className="flex gap-2 p-3 cursor-pointer hover:bg-transparent">
-            <img className="h-6" src={profile?.profileImg} alt="" />
-            <span className="text-sm">{profile?.profileName}</span>
+            <img className="h-6" src={selectedProfile?.profileImg} alt="" />
+            <span className="text-sm">{selectedProfile?.profileName}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-zinc-500" />
         <DropdownMenuGroup>
-          {MyProfiles?.map((profile) => {
+          {userProfiles?.map((profile) => {
             return (
               <DropdownMenuItem
                 key={profile.id}
