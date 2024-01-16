@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useUserContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { useProfilesContext } from "@/context/ProfilesContext";
 import ProfilesList from "./ProfilesList";
 
 const ChooseProfile = () => {
-  const { user } = useUserContext();
   const { setProfile,MyProfiles } = useProfilesContext();
   const router = useRouter();
   // const [myProfiles, setMyProfiles] = useState<Profile[] | undefined>([]);

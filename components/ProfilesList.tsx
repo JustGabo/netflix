@@ -17,11 +17,9 @@ const ProfilesList = () => {
       if(error){
         console.log(error)
       }else{
-        console.log(data)
         setUserProfiles(data)
       }
     }
-    console.log(user)
   }
 
   useEffect(()=>{

@@ -38,7 +38,7 @@ const AccountMenu = () => {
           <Icon />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mt-5 mr-24 text-white border bg-zinc-950 w-36 border-zinc-500">
+      <DropdownMenuContent className="mt-1 mr-8 md:mt-5 md:mr-24 text-white border bg-zinc-950 w-36 border-zinc-500">
         <DropdownMenuGroup>
           <DropdownMenuItem className="flex gap-2 p-3 cursor-pointer hover:bg-transparent">
             <img className="h-6" src={selectedProfile?.profileImg} alt="" />

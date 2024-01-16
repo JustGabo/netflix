@@ -1,11 +1,8 @@
 import { supabase } from "@/db/supabase";
-import { InfoIcon,  PlusCircleIcon } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "./ui/dialog";
+import { InfoIcon, PlusCircleIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import GoToMovieFromModal from "./GoToMovieFromModal";
+import BilboardMenuMovile from "./BilboardMenuMovile";
 
 const Billboard = async () => {
   const { data, error } = await supabase.from("movies").select("*");
@@ -17,9 +14,10 @@ const Billboard = async () => {
   // }
 
   return (
-    <div className="relative h-[56.25vw]">
+    <div className="relative h-[70vh] md:h-[56.25vw]">
+      <BilboardMenuMovile randomMovie={randomMovie} />
       <video
-        className="w-full h-[56.25vw] object-cover brightness-[60%]"
+        className="w-full hidden md:relative h-[56.25vw] object-cover brightness-[60%]"
         autoPlay
         muted
         loop
@@ -27,13 +25,13 @@ const Billboard = async () => {
       ></video>
 
       <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16 ">
-        <h1 className="text-white text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
+        <h1 className="text-white hidden md:relative text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
           {randomMovie.name}
         </h1>
-        <p className=" text-white text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
+        <p className=" text-white hidden md:relative text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
           {randomMovie.description}
         </p>
-        <div className="flex flex-row items-center gap-3 mt-3 overflow-x-hidden md:mt-4">
+        <div className=" flex-row hidden md:flex items-center gap-3 mt-3 overflow-x-hidden md:mt-4">
           <Dialog>
             <DialogTrigger asChild>
               <button className="flex flex-row items-center w-auto px-2 py-1 text-xs font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
@@ -56,7 +54,7 @@ const Billboard = async () => {
                       {randomMovie.name}
                     </p>
                     <div className="flex flex-row items-center gap-3">
-                      <GoToMovieFromModal id={randomMovie.id}/>
+                      <GoToMovieFromModal id={randomMovie.id} />
                       <button className="transition duration-150 hover:opacity-50">
                         <PlusCircleIcon className="w-8 h-8 font-light text-white" />
                       </button>
@@ -69,9 +67,7 @@ const Billboard = async () => {
                   </span>
                   <span className="text-xs">{randomMovie.duration}</span>
                   <span className="text-xs">Si-fi</span>
-                  <p className="text-sm">
-                    {randomMovie.description}
-                  </p>
+                  <p className="text-sm">{randomMovie.description}</p>
                 </div>
               </div>
             </DialogContent>

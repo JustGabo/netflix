@@ -1,31 +1,26 @@
 "use client";
 import { ChevronDown, PlayCircle, PlayCircleIcon } from "lucide-react";
 import React, { useState } from "react";
-import {
-  BsPlayFill,
-} from "react-icons/bs";
+import { BsPlayFill } from "react-icons/bs";
 
-import {Movie} from '@/types/index'
+import { Movie } from "@/types/index";
 import { useRouter } from "next/navigation";
 import { useMovieUrlContext } from "@/context/MovieContext";
 import FavoriteButton from "./FavoriteButton";
 
-interface MovieCardProps{
-  movie: Movie
+interface MovieCardProps {
+  movie: Movie;
 }
 
-
-const MovieCard = ({movie}: MovieCardProps) => {
-
-  const router = useRouter()
-  const {setUrl,setName} = useMovieUrlContext()
-  const [loading, setLoading] = useState(false)
-
+const MovieCard = ({ movie }: MovieCardProps) => {
+  const router = useRouter();
+  const { setUrl, setName } = useMovieUrlContext();
+  const [loading, setLoading] = useState(false);
 
   return (
-    <div className="group bg-zinc-900 col-span relative h-[12vw]">
+    <div className="group bg-zinc-900 col-span relative h-[150px] md:h-[12vw]">
       <img
-        onClick={() => {}}
+        onClick={() => router.push(`/watch/${movie.id}`)}
         src={movie.posterUrl}
         alt="Movie"
         draggable={false}
@@ -40,9 +35,25 @@ const MovieCard = ({movie}: MovieCardProps) => {
       sm:group-hover:opacity-0
       delay-300
       w-full
-      h-[12vw]
+      h-full
+      md:h-[12vw]
     "
       />
+      <div className="  absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-transparent  md:hidden">
+        <div
+          onClick={() => {
+            setUrl(movie.url);
+            setName(movie.name);
+            router.push(`/watch/${movie.id}`);
+          }}
+          className={`cursor-pointer ${
+            loading ? "cursor-not-allowed" : "cursor-pointer"
+          } w-12 h-12 lg:w-10 lg:h-10 bg-zinc-900/80 border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
+        >
+          <BsPlayFill className="w-6 h-6 text-white md:text-black" />
+        </div>
+      </div>
+
       <div
         className="
       opacity-0
@@ -63,7 +74,7 @@ const MovieCard = ({movie}: MovieCardProps) => {
     "
       >
         <img
-          onClick={() => {}}
+          onClick={() => router.push(`/watch/${movie.id}`)}
           src={movie.posterUrl}
           alt="Movie"
           draggable={false}
@@ -78,21 +89,21 @@ const MovieCard = ({movie}: MovieCardProps) => {
         h-[12vw]
       "
         />
-        <div
-          className="absolute z-10 w-full p-2 transition shadow-md bg-zinc-800 lg:p-4 rounded-b-md"
-        >
+        <div className="absolute z-10 w-full p-2 transition shadow-md bg-zinc-800 lg:p-4 rounded-b-md">
           <div className="flex flex-row items-center gap-3">
             <div
-              onClick={()=>{
-                setUrl(movie.url)
-                setName(movie.name)
-                router.push(`/watch/${movie.id}`)
+              onClick={() => {
+                setUrl(movie.url);
+                setName(movie.name);
+                router.push(`/watch/${movie.id}`);
               }}
-              className={`cursor-pointer ${loading? 'cursor-not-allowed' : 'cursor-pointer'} w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
+              className={`cursor-pointer ${
+                loading ? "cursor-not-allowed" : "cursor-pointer"
+              } w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
             >
               <BsPlayFill className="w-6 h-6 text-black" />
             </div>
-            
+
             <FavoriteButton movie={movie} />
             <div
               onClick={() => {}}
@@ -105,7 +116,9 @@ const MovieCard = ({movie}: MovieCardProps) => {
             New <span className="text-white">2023</span>
           </p>
           <div className="flex flex-row items-center gap-2 mt-4">
-            <p className="text-white text-[10px] lg:text-xs">Duration: {movie.duration}</p>
+            <p className="text-white text-[10px] lg:text-xs">
+              Duration: {movie.duration}
+            </p>
           </div>
           <div className="flex flex-row items-center gap-2 mt-4 text-[8px] text-white lg:text-xs">
             {movie.genre}
