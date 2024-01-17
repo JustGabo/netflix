@@ -39,7 +39,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       md:h-[12vw]
     "
       />
-      <div className="  absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-transparent  md:hidden">
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-transparent md:hidden">
         <div
           onClick={() => {
             setUrl(movie.url);
@@ -48,7 +48,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           }}
           className={`cursor-pointer ${
             loading ? "cursor-not-allowed" : "cursor-pointer"
-          } w-12 h-12 lg:w-10 lg:h-10 bg-zinc-900/80 border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
+          } w-12 h-12 bg-zinc-900/80 border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
         >
           <BsPlayFill className="w-6 h-6 text-white md:text-black" />
         </div>
@@ -99,7 +99,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
               }}
               className={`cursor-pointer ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
-              } w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
+              } w-10 h-10  bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
             >
               <BsPlayFill className="w-6 h-6 text-black" />
             </div>

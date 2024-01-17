@@ -1,36 +1,41 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import NavBarItem from "./NavBarItem";
 import DropDownMenu from "./DropDownMenu";
 import { BsSearch, BsBell } from "react-icons/bs";
-import NavBarRightSide from "./NavBarRightSide";
+import dynamic from "next/dynamic";
+const TOP_OFFSET = 66;
 
-const TOP_OFFSET = 66
-
+const NavBarRightSide = dynamic(() => import("./NavBarRightSide"), {
+  ssr: false, // this means that the component will be ALWAYS rendered on the client
+});
 
 const NavBar = () => {
+  const [showBackground, SetShowBackground] = useState(false);
 
-  const [showBackground, SetShowBackground] = useState(false)
-
-  useEffect(()=>{
-    const handleScroll = ()=>{
-      if(window.scrollY >= TOP_OFFSET){
-        SetShowBackground(true)
-      }else{
-        SetShowBackground(false)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= TOP_OFFSET) {
+        SetShowBackground(true);
+      } else {
+        SetShowBackground(false);
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll);
 
-    return ()=>{
-      window.addEventListener('scroll', handleScroll)
-    }
-  },[])
+    return () => {
+      window.addEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <nav className="fixed z-40 w-full">
-      <div className={`px-4 md:px-16 py-6 flex flex-row items-center  transition-none duration-500 ${showBackground ? 'bg-zinc-900 bg-opacity-90' : ''}`}>
+      <div
+        className={`px-4 md:px-16 py-6 flex flex-row items-center  transition-none duration-500 ${
+          showBackground ? "bg-zinc-900 bg-opacity-90" : ""
+        }`}
+      >
         <img src="/images/logo.png" className="h-6 lg:h-7" alt="logo" />
         <div className="flex-row hidden ml-8 text-xs gap-7 lg:flex">
           <NavBarItem label="Home" />
@@ -50,7 +55,8 @@ const NavBar = () => {
           <div className="text-gray-200 transition cursor-pointer hover:text-gray-400">
             <BsBell />
           </div>
-          <NavBarRightSide/>
+
+          <NavBarRightSide />
         </div>
       </div>
     </nav>

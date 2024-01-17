@@ -1,5 +1,5 @@
 "use client";
-import {createClientComponentClient} from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useCallback, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -7,16 +7,18 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 import Input from "@/components/Input";
+import useUserStore from "@/stores/user";
 
 const Auth = () => {
   const router = useRouter();
-  const supabase = createClientComponentClient()
+  const supabase = createClientComponentClient();
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
+  const { setUser } = useUserStore((set) => set);
 
   const [variant, setVariant] = useState("login");
 
@@ -44,14 +46,20 @@ const Auth = () => {
   };
 
   const login = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) {
       console.log(error);
     }
-    router.refresh()
+    if (user) {
+      setUser(user);
+    }
+    router.refresh();
   };
 
   const register = async () => {
@@ -65,7 +73,7 @@ const Auth = () => {
         },
       },
     });
-    
+
     if (data.user !== null) {
       const result = await supabase.from("profiles").insert({
         ownerId: data.user.id,
@@ -82,7 +90,8 @@ const Auth = () => {
     }
 
     setWaitingConfirmation(true);
-    router.refresh()
+    setUser(data.user)
+    router.refresh();
   };
 
   const GithubSign = async () => {

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import AccountMenu from "./AccountMenu";
 import { redirect } from "next/navigation";
 import useProfileStore from "@/stores/profile";
+
+import AccountMenu from "./AccountMenu";
 
 const NavBarRightSide = () => {
   const { selectedProfile } = useProfileStore((state)=> state);
@@ -18,6 +19,7 @@ const NavBarRightSide = () => {
       <div className="w-6 h-6 overflow-hidden rounded-md lg:w-10 lg:h-10">
         <img src={selectedProfile?.profileImg} alt="" />
       </div>
+      
       <AccountMenu />
     </div>
   );

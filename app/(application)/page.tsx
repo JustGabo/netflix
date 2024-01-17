@@ -9,7 +9,7 @@ export default async function Home() {
       {/* <InfoModal/> */}
       <NavBar />
       <Billboard />
-      <div className="">
+      <div className="pb-16">
         <MovieList />
         <FavoriteList/>
       </div>

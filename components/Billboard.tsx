@@ -8,6 +8,7 @@ const Billboard = async () => {
   const { data, error } = await supabase.from("movies").select("*");
 
   let randomMovie = data![Math.floor(Math.random() * data!.length)];
+  console.log(randomMovie.url)
   // if (error) {
   //   randomUrl =
   //     "https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z";
@@ -17,7 +18,7 @@ const Billboard = async () => {
     <div className="relative h-[70vh] md:h-[56.25vw]">
       <BilboardMenuMovile randomMovie={randomMovie} />
       <video
-        className="w-full hidden md:relative h-[56.25vw] object-cover brightness-[60%]"
+        className="w-full hidden md:relative md:block h-[56.25vw] object-cover brightness-[60%]"
         autoPlay
         muted
         loop
@@ -25,13 +26,13 @@ const Billboard = async () => {
       ></video>
 
       <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16 ">
-        <h1 className="text-white hidden md:relative text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
+        <h1 className="text-white hidden md:block text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
           {randomMovie.name}
         </h1>
-        <p className=" text-white hidden md:relative text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
+        <p className=" text-white hidden md:block text-[8px] md:text-base font-light mt-3  w-[90%] md:w-[80%] lg:w-[50%] drop-shadow-xl">
           {randomMovie.description}
         </p>
-        <div className=" flex-row hidden md:flex items-center gap-3 mt-3 overflow-x-hidden md:mt-4">
+        <div className="flex-row items-center hidden gap-3 mt-3 overflow-x-hidden md:flex md:mt-4">
           <Dialog>
             <DialogTrigger asChild>
               <button className="flex flex-row items-center w-auto px-2 py-1 text-xs font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
