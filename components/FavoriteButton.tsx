@@ -1,70 +1,83 @@
-"use client"
+"use client";
 import useProfileStore from "@/stores/profile";
-import { Movie } from "@/types";
-import {createClientComponentClient} from '@supabase/auth-helpers-nextjs'
-import { HeartPulseIcon } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import { BsHeartFill, BsHearts } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
+import { BsHeartFill } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
+import { Movie } from "@/types/index";
 
 interface FavoriteButtonProps {
   movie: Movie;
+  liked?: boolean;
 }
 
-const FavoriteButton = ({ movie }: FavoriteButtonProps) => {
+const FavoriteButton = ({ movie, liked }: FavoriteButtonProps) => {
+  const supabase = createClientComponentClient();
+  const router = useRouter()
+  const [isLiked, setIsLiked] = useState(liked? liked: false);
+  const [likedMovies, setLikedMovies] = useState<Movie[] | null>();
+  const [currentProfileLikedSongs, setCurrentProfileLikedSongs] = useState<
+    Movie[] | null
+  >(null);
 
-    const supabase = createClientComponentClient()
+  const Icon = isLiked ? BsHeartFill : FaRegHeart;
 
-    const {selectedProfile} = useProfileStore((set)=> set)
-    const router = useRouter()
+  const { selectedProfile } = useProfileStore((set) => set);
 
-    const handleLike = async()=>{
-        const {data, error} = await supabase.from('favorites').insert({
-            favoriteOwner:selectedProfile?.id,
-            url: movie.url,
-            posterUrl: movie.posterUrl,
-            description: movie.description,
-            duration: movie.duration,
-            name: movie.name,
-            genre: movie.genre,
-            movieId: movie.id
-        })
+  const gettingLikedMovie = async () => {
+    const { data, error } = await supabase
+      .from("favorites")
+      .select("*")
+      .eq("favoriteOwner", selectedProfile?.id)
+      .eq("movieId", movie.id);
+    if (data?.length! > 0) {
+      setIsLiked(true);
+    }
+  };
+
+  const handleLike = async () => {
+    if (isLiked) {
+      const {error, data} = await supabase
+        .from("favorites")
+        .delete()
+        .eq("favoriteOwner", selectedProfile?.id)
+        .eq("movieId", movie.id);
         if(error){
-            console.log(error)
+          console.log(error)
         }else{
-            console.log(data)
-            router.refresh()
-        }
-    }
-
-    const handleUnlike = async()=>{
-      const {data,error} = await supabase.from('favorites').delete().eq('favoriteOwner', selectedProfile?.id).eq('movieId', movie.id)
-      if(error){
-        console.log(error)}
-        else{
+          setIsLiked(false)
           console.log(data)
-          router.refresh()
         }
+    } else {
+      const { data, error } = await supabase.from("favorites").insert({
+        favoriteOwner: selectedProfile?.id,
+        url: movie.url,
+        posterUrl: movie.posterUrl,
+        description: movie.description,
+        duration: movie.duration,
+        name: movie.name,
+        genre: movie.genre,
+        movieId: movie.id,
+      });
+      if (error) {
+        console.log(error);
+      } else {
+        setIsLiked(true);
+      }
     }
+  };
 
-    // const isLiked = async ()=> {
-    //   const {data, error} = await supabase.from('favorites').select("*").eq('favoriteOwner', selectedProfile?.id).eq('movieId', movie.id)
-    //   if(data?.length == 0){
-    //     return false
-    //   }else if(data?.length >= 0){
-    //     return true
-    //   }
-    // }
-
-    // useEffect(()=>{
-    //   isLiked()
-    // },[])
+  useEffect(() => {
+    gettingLikedMovie();
+  }, []);
 
   return (
-    <div onClick={handleLike} className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:bg-white/80">
-      {/* <BsHeartFill className="text-black " /> */}
-      <FaRegHeart className="w-5 h-5"/>
+    <div
+      onClick={handleLike}
+      className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:bg-white/80"
+    >
+      <Icon />
     </div>
   );
 };

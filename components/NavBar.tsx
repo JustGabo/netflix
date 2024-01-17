@@ -4,6 +4,7 @@ import NavBarItem from "./NavBarItem";
 import DropDownMenu from "./DropDownMenu";
 import { BsSearch, BsBell } from "react-icons/bs";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 const TOP_OFFSET = 66;
 
 const NavBarRightSide = dynamic(() => import("./NavBarRightSide"), {
@@ -12,6 +13,7 @@ const NavBarRightSide = dynamic(() => import("./NavBarRightSide"), {
 
 const NavBar = () => {
   const [showBackground, SetShowBackground] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,7 +51,7 @@ const NavBar = () => {
           <DropDownMenu />
         </div>
         <div className="flex flex-row items-center ml-auto gap-7">
-          <div className="text-gray-200 transition cursor-pointer hover:text-gray-400">
+          <div onClick={()=> router.push('/search')} className="text-gray-200 transition cursor-pointer hover:text-gray-400">
             <BsSearch />
           </div>
           <div className="text-gray-200 transition cursor-pointer hover:text-gray-400">

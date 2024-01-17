@@ -10,12 +10,16 @@ import FavoriteButton from "./FavoriteButton";
 
 interface MovieCardProps {
   movie: Movie;
+  liked?: boolean
 }
 
-const MovieCard = ({ movie }: MovieCardProps) => {
+const MovieCard = ({ movie, liked }: MovieCardProps) => {
   const router = useRouter();
   const { setUrl, setName } = useMovieUrlContext();
   const [loading, setLoading] = useState(false);
+
+
+  
 
   return (
     <div className="group bg-zinc-900 col-span relative h-[150px] md:h-[12vw]">
@@ -104,7 +108,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
               <BsPlayFill className="w-6 h-6 text-black" />
             </div>
 
-            <FavoriteButton movie={movie} />
+            <FavoriteButton movie={movie} liked={liked} />
             <div
               onClick={() => {}}
               className="flex items-center justify-center w-6 h-6 ml-auto transition border-2 border-white rounded-full cursor-pointer group/item lg:w-10 lg:h-10 hover:border-neutral-300"

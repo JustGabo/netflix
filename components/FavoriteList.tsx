@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { supabase } from "@/db/supabase";
 import { Movie } from "@/types";
-import useUserStore from "@/stores/user";
 import useProfileStore from "@/stores/profile";
 
 const FavoriteList = () => {
@@ -31,10 +30,10 @@ const FavoriteList = () => {
         {movies.length > 0 ? (
                   <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
                   {movies?.map((movie) => {
-                    return <MovieCard key={movie.id} movie={movie}/>;
+                    return <MovieCard key={movie.id} liked={true} movie={movie}/>;
                   })}
                 </div>
-        ) : <div >
+        ) : <div className="flex mt-16 items-center justify-center w-full">
           <h2 className="text-sm text-gray-500 ">There is no favorite movies</h2>
         </div> }
       </div>
