@@ -27,7 +27,7 @@ const ProfilesList = () => {
   },[])
 
   return (
-    <div className="flex items-center justify-center gap-8 mt-10">
+    <main className="flex items-center justify-center gap-8 mt-10">
       {userProfiles?.map((profile) => {
         return (
           <div
@@ -36,21 +36,21 @@ const ProfilesList = () => {
               setSelectedProfile(profile);
               setTimeout(() => {
                 router.push("/");
-              }, 1000);
+              }, 500);
             }}
           >
-            <div className="flex-row w-32 mx-auto group ">
-              <div className="flex items-center justify-center w-32 h-32 overflow-hidden border-2 border-transparent rounded-md group-hover:cursor-pointer group-hover:border-white group-hover:transition">
+            <div className="flex-row w-16 md:w-32 mx-auto group ">
+              <div className="flex items-center justify-center md:w-32 md:h-32 w-16 h-16 overflow-hidden border-2 border-transparent rounded-md group-hover:cursor-pointer group-hover:border-white group-hover:transition">
                 <img src={profile.profileImg} alt="" />
               </div>
-              <div className="mt-4 text-2xl text-center text-gray-400 group-hover:text-white group-hover:transition">
+              <div className="md:mt-4 mt-2 text-base md:text-2xl text-center text-gray-400 group-hover:text-white group-hover:transition">
                 {profile.profileName}
               </div>
             </div>
           </div>
         );
       })}
-    </div>
+    </main>
   );
 };
 

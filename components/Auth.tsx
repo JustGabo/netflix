@@ -90,7 +90,7 @@ const Auth = () => {
     }
 
     setWaitingConfirmation(true);
-    setUser(data.user)
+    setUser(data.user);
     router.refresh();
   };
 
@@ -111,17 +111,17 @@ const Auth = () => {
   }, []);
 
   return (
-    <div className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
-      <div className="w-full h-full bg-black lg:bg-opacity-50">
-        <nav className="px-12 py-5">
-          <img src="/images/logo.png" className="h-12" alt="Logo" />
+    <main className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+      <section className="w-full h-full bg-opacity-20 md:bg-opacity-50">
+        <nav className="lg:px-12 px-6 bg-black/70 md:bg-transparent lg:py-5 py-8">
+          <img src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
         </nav>
-        <div className="flex justify-center">
-          <div className="self-center w-full px-12 py-10 mt-2 bg-black rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-ld">
-            <h2 className="mb-8 text-4xl font-semibold text-white">
+        <article className="flex justify-center">
+          <div className="self-center md:w-[90%] md:h-auto h-[calc(100vh-80px)] w-full px-6 lg:px-12 py-5 lg:py-10 md:py-8 md:mt-2 bg-black md:rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-lg">
+            <h2 className="mb-8 text-2xl md:text-4xl  font-semibold text-white">
               {variant === "login" ? "Sign in" : "Register"}
             </h2>
-            <div className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4">
               {variant === "register" && (
                 <Input
                   id="name"
@@ -145,14 +145,14 @@ const Auth = () => {
                 value={password}
                 onChange={(e: any) => setPassword(e.target.value)}
               />
-            </div>
+            </form>
             <button
               onClick={variant === "login" ? login : register}
-              className="w-full py-3 mt-4 text-white transition bg-red-600 rounded-md hover:bg-red-700"
+              className="w-full font-semibold py-3 mt-4 text-white transition bg-red-600 rounded-md hover:bg-red-700"
             >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
-            <div className="flex flex-row items-center justify-center gap-4 mt-6">
+            {/* <div className="flex flex-row items-center justify-center gap-4 mt-6">
               <div
                 onClick={() => signIn("google", { callbackUrl: "/profiles" })}
                 className="flex items-center justify-center w-10 h-10 transition bg-white rounded-full cursor-pointer hover:opacity-80"
@@ -164,30 +164,30 @@ const Auth = () => {
                   <FaGithub size={32} />
                 </button>
               </div>
-            </div>
+            </div> */}
 
-            <p className="mt-6 text-neutral-500">
+            <p className="mt-6 text-sm md:text-base text-neutral-400">
               {variant === "login"
                 ? "First time using Netflix?"
                 : "Already have an account?"}
               <span
                 onClick={toggleVariant}
-                className="ml-1 text-white cursor-pointer hover:underline"
+                className="ml-1 text-white text-sm md:text-base cursor-pointer hover:underline"
               >
                 {variant === "login" ? "Create an account" : "Login"}
               </span>
             </p>
           </div>
-        </div>
+        </article>
         {waitingConfirmation && (
-          <div className="w-full m-auto mt-2 bg-black rounded-md p-7 bg-opacity-70 lg:w-2/5 lg:max-w-lg">
-            <span className="text-gray-300">
+          <div className="lg:w-full w-[80%] md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+            <span className="text-green-500">
               Please confirm your email address to continue
             </span>
           </div>
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

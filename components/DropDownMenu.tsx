@@ -18,7 +18,7 @@ const DropDownMenu = () => {
           <ChevronDownIcon />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-zinc-950 text-white">
+      <DropdownMenuContent className="bg-zinc-900 border-zinc-500 text-white">
         <DropdownMenuGroup>
           <DropdownMenuItem>Home</DropdownMenuItem>
           <DropdownMenuItem>Series</DropdownMenuItem>{" "}

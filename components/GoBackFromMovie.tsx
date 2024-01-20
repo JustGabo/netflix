@@ -8,7 +8,7 @@ const GoBackFromMovie = () => {
 
   return (
     <ChevronLeft
-      onClick={() => router.push("/")}
+      onClick={() => router.back()}
       className="text-white cursor-pointer"
       size={40}
     />

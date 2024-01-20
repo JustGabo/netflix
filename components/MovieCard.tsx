@@ -52,7 +52,19 @@ const MovieCard = ({ movie, liked }: MovieCardProps) => {
           }}
           className={`cursor-pointer ${
             loading ? "cursor-not-allowed" : "cursor-pointer"
-          } w-12 h-12 bg-zinc-900/80 border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
+          } w-12 h-12 hidden bg-zinc-900/80 border border-white md:border-none md:bg-white rounded-full lg:flex justify-center items-center transition hover:bg-neutral-300`}
+        >
+          <BsPlayFill className="w-6 h-6 text-white md:text-black" />
+        </div>
+        <div
+          onClick={() => {
+            setUrl(movie.url);
+            setName(movie.name);
+            router.push(`/movieInfo/${movie.id}`);
+          }}
+          className={`cursor-pointer ${
+            loading ? "cursor-not-allowed" : "cursor-pointer"
+          } w-12 h-12 bg-zinc-900/80 lg:hidden border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
         >
           <BsPlayFill className="w-6 h-6 text-white md:text-black" />
         </div>

@@ -3,12 +3,14 @@ import { InfoIcon, PlusCircleIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import GoToMovieFromModal from "./GoToMovieFromModal";
 import BilboardMenuMovile from "./BilboardMenuMovile";
+import { BsPlayFill } from "react-icons/bs";
+import { redirect } from "next/navigation";
 
 const Billboard = async () => {
   const { data, error } = await supabase.from("movies").select("*");
 
   let randomMovie = data![Math.floor(Math.random() * data!.length)];
-  console.log(randomMovie.url)
+
   // if (error) {
   //   randomUrl =
   //     "https://elzylcnbaomumijxskps.supabase.co/storage/v1/object/public/movies/deadpool.mp4?t=2024-01-12T01%3A59%3A52.802Z";
@@ -25,7 +27,7 @@ const Billboard = async () => {
         src={randomMovie.url}
       ></video>
 
-      <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16 ">
+      <div className="absolute top-[30%] md:top-[30%] ml-4 md:ml-16 ">
         <h1 className="text-white hidden md:block text-xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
           {randomMovie.name}
         </h1>
@@ -33,9 +35,10 @@ const Billboard = async () => {
           {randomMovie.description}
         </p>
         <div className="flex-row items-center hidden gap-3 mt-3 overflow-x-hidden md:flex md:mt-4">
+          <GoToMovieFromModal width={36} id={randomMovie.id}/>
           <Dialog>
             <DialogTrigger asChild>
-              <button className="flex flex-row items-center w-auto px-2 py-1 text-xs font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
+              <button className="flex flex-row items-center w-auto px-2 py-1  font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
                 <InfoIcon className="mr-1 text-white" />
                 More info
               </button>
@@ -55,7 +58,7 @@ const Billboard = async () => {
                       {randomMovie.name}
                     </p>
                     <div className="flex flex-row items-center gap-3">
-                      <GoToMovieFromModal id={randomMovie.id} />
+                      <GoToMovieFromModal width={20} id={randomMovie.id} />
                       <button className="transition duration-150 hover:opacity-50">
                         <PlusCircleIcon className="w-8 h-8 font-light text-white" />
                       </button>

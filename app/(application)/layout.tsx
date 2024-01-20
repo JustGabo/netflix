@@ -13,7 +13,6 @@ export default async function ApplicationLayout({ children }: Props) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("CURRENT SESSION", session);
 
   if (!session) {
     return redirect("/auth");

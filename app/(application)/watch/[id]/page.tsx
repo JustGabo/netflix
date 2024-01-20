@@ -1,6 +1,7 @@
 // "use client";
 import GoBackFromMovie from "@/components/GoBackFromMovie";
-import { supabase } from "@/db/supabase";
+// import { supabase } from "@/db/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface WatchPageProps {
   params: {
@@ -9,7 +10,7 @@ interface WatchPageProps {
 }
 
 const WatchPage = async ({ params }: WatchPageProps) => {
-  console.log(params.id);
+  const supabase = createClientComponentClient();
 
   const { data } = await supabase
     .from("movies")
@@ -19,7 +20,7 @@ const WatchPage = async ({ params }: WatchPageProps) => {
 
   return (
     <div className="w-screen h-screen bg-black">
-      <nav className="fixed z-10 flex flex-row items-center w-full gap-8 p-4 bg-black bg-opacity-70">
+      <nav className="fixed z-10 flex flex-row items-center w-full lg:gap-8 gap-2 p-4 bg-black bg-opacity-70">
         <GoBackFromMovie />
         <p className="text-xl font-bold text-white md:text3xl">
           <span className="font-light text-white">Watching: </span>

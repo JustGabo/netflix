@@ -5,19 +5,21 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Animation from "@/components/pulsates/MoviesAnimationLoading";
 
 const SearchComponent = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([])
-  const [input, setInput] = useState('')
-  const router = useRouter()
+  const [filteredMovies, setFilteredMovies] = useState<Movie[] | null>(null);
+  const [input, setInput] = useState("");
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const getMovies = async () => {
     const { data, error } = await supabase.from("movies").select("*");
     if (data) {
-      console.log(data);
       setMovies(data);
-      setFilteredMovies(data)
+      setFilteredMovies(data);
+      setLoading(false)
     } else {
       console.log(error);
     }
@@ -27,7 +29,7 @@ const SearchComponent = () => {
     const value = e.target.value;
 
     if (value === "") {
-        setFilteredMovies(movies)
+      setFilteredMovies(movies);
       return;
     }
 
@@ -44,31 +46,50 @@ const SearchComponent = () => {
 
   return (
     <section className="md:p-8 p-4 pt-8  flex flex-col gap-10">
-        <article className="flex items-center gap-3">
-        <ChevronLeft onClick={()=> router.push('/')} className="text-white w-7 h-7 cursor-pointer"/>
-      <form className="flex-1" action="">
-        <input
-        onChange={(e)=>{
-            search(e)
-            setInput(e.target.value)
-        }}
-          className="w-full p-2 bg-zinc-800 text-white outline-none rounded-md placeholder:text-sm"
-          type="text"
-          placeholder="Search for your movie"
+      <article className="flex items-center gap-3">
+        <ChevronLeft
+          onClick={() => router.push("/")}
+          className="text-white w-7 h-7 cursor-pointer"
         />
-      </form>
-        </article>
-      {
-        filteredMovies.length > 0 ? (
-            <div className="grid grid-cols-2  gap-2 md:grid-cols-4">
-            {filteredMovies.map((movie) => {
-              return <MovieCard movie={movie} key={movie.id} />;
-            })}
-          </div>
-        ) : <div className="text-white">
-            <p className="text-sm font-light">No movies found with the name: <span className="font-bold">{input}</span></p>
+        <form className="flex-1" action="">
+          <input
+            onChange={(e) => {
+              search(e);
+              setInput(e.target.value);
+            }}
+            className="w-full p-2 bg-zinc-800 text-white outline-none rounded-md placeholder:text-sm"
+            type="text"
+            placeholder="Search for your movie"
+          />
+        </form>
+      </article>
+      {loading ? (
+        <div className="grid grid-cols-2  gap-2 md:grid-cols-4">
+          <Animation />
+          <Animation />
+          <Animation />
+          <Animation />
         </div>
-      }
+      ) : (
+        <div>
+          {filteredMovies?.length! > 0 ? (
+            <div className="grid grid-cols-2  gap-2 md:grid-cols-4">
+              {filteredMovies?.map((movie) => {
+                return <MovieCard movie={movie} key={movie.id} />;
+              })}
+            </div>
+          ) : (
+            filteredMovies !== null && (
+              <div className="text-white">
+                <p className="text-sm font-light">
+                  No movies found with the name:{" "}
+                  <span className="font-bold">{input}</span>
+                </p>
+              </div>
+            )
+          )}
+        </div>
+      )}
     </section>
   );
 };

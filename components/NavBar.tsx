@@ -39,7 +39,7 @@ const NavBar = () => {
         }`}
       >
         <img src="/images/logo.png" className="h-6 lg:h-7" alt="logo" />
-        <div className="flex-row hidden ml-8 text-xs gap-7 lg:flex">
+        <div className="flex-row hidden ml-8 text-xs  gap-7 lg:flex">
           <NavBarItem label="Home" />
           <NavBarItem label="Series" />
           <NavBarItem label="Films" />
