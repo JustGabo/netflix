@@ -1,6 +1,7 @@
 "use client";
 import { Movie } from "@/types";
 import { PlusCircleIcon } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BsPlayFill } from "react-icons/bs";
@@ -17,7 +18,7 @@ const BilboardMenuMovile: React.FC<BilboardMenuMovileProps> = ({
   return (
     <section className="pt-20 px-5    relative md:hidden h-full">
       <article className="h-full relative">
-        <img
+        <Image width={500}  height={200}
           className="object-cover  rounded-xl h-full"
           src={randomMovie.posterUrl}
           alt=""

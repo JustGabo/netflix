@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import useProfileStore from "@/stores/profile";
 import Link from "next/link";
 import useUserStore from "@/stores/user";
+import Image from "next/image";
 
 const AccountMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +47,7 @@ const AccountMenu = () => {
       <DropdownMenuContent className="mt-1 mr-8 text-white border md:mt-5 md:mr-24 bg-zinc-900 w-36 border-zinc-500">
         <DropdownMenuGroup>
           <DropdownMenuItem className="flex gap-2 p-3 cursor-pointer hover:bg-transparent">
-            <img className="h-6" src={selectedProfile?.profileImg} alt="" />
+            <Image width={25} height={25} className="h-6" src={selectedProfile?.profileImg!} alt="" />
             <span className="text-sm">{selectedProfile?.profileName}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>

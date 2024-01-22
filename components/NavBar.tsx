@@ -5,6 +5,7 @@ import DropDownMenu from "./DropDownMenu";
 import { BsSearch, BsBell } from "react-icons/bs";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 const TOP_OFFSET = 66;
 
 const NavBarRightSide = dynamic(() => import("./NavBarRightSide"), {
@@ -38,7 +39,7 @@ const NavBar = () => {
           showBackground ? "bg-zinc-900 bg-opacity-90" : ""
         }`}
       >
-        <img src="/images/logo.png" className="h-6 lg:h-7" alt="logo" />
+        <Image width={100} height={100} src="/images/logo.png" className="h-6 lg:h-7" alt="logo" />
         <div className="flex-row hidden ml-8 text-xs  gap-7 lg:flex">
           <NavBarItem label="Home" />
           <NavBarItem label="Series" />

@@ -7,6 +7,7 @@ import UpdateProfileForm from "./UpdateProfileForm";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Logos } from "@/types";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Variants = {
   create: JSX.Element;
@@ -63,7 +64,7 @@ const SettingsPageContent: React.FC<Props> = ({ logosProps }) => {
                           : "border-none"
                       } md:w-16 md:h-16 lg:h-32 w-full h-full lg:w-32 overflow-hidden  rounded-md group-hover:cursor-pointer group-hover:border-white group-hover:transition`}
                     >
-                      <img src={profile.profileImg} alt="" />
+                      <Image width={200} height={200} src={profile.profileImg} alt="" />
                     </div>
                     <UpdateProfileForm logos={logosProps} profile={profile} />
                   </div>

@@ -8,6 +8,7 @@ import { FaGithub } from "react-icons/fa";
 
 import Input from "@/components/Input";
 import useUserStore from "@/stores/user";
+import Image from "next/image";
 
 const Auth = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const Auth = () => {
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
   const { setUser } = useUserStore((set) => set);
+  const [error, setError] = useState<string | null>(null)
 
   const [variant, setVariant] = useState("login");
 
@@ -54,7 +56,7 @@ const Auth = () => {
       password,
     });
     if (error) {
-      console.log(error);
+      setError("Invalid credentials")
     }
     if (user) {
       setUser(user);
@@ -82,11 +84,11 @@ const Auth = () => {
         ownerEmail: email,
       });
       if (result.error) {
-        return console.log(result.error);
+        return result.error
       }
       creatingUser();
     } else {
-      return console.log(error);
+      return error;
     }
 
     setWaitingConfirmation(true);
@@ -114,7 +116,7 @@ const Auth = () => {
     <main className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <section className="w-full h-full bg-opacity-20 md:bg-opacity-50">
         <nav className="lg:px-12 px-6 bg-black/70 md:bg-transparent lg:py-5 py-8">
-          <img src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
+          <Image width={200} height={200} src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
         </nav>
         <article className="flex justify-center">
           <div className="self-center md:w-[90%] md:h-auto h-[calc(100vh-80px)] w-full px-6 lg:px-12 py-5 lg:py-10 md:py-8 md:mt-2 bg-black md:rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-lg">
@@ -179,6 +181,13 @@ const Auth = () => {
             </p>
           </div>
         </article>
+        {error && (
+          <div className="lg:w-full w-[80%] md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+            <span className="text-red-500">
+              {error}
+            </span>
+          </div>
+        )}
         {waitingConfirmation && (
           <div className="lg:w-full w-[80%] md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
             <span className="text-green-500">

@@ -4,7 +4,7 @@ import React from 'react'
 import {  BsPlayFill } from "react-icons/bs";
 
 interface MobileFavoriteButtonProps{
-  id: string
+  id: number
 }
 
 const MobilePlayButtonFromInfo = ({id}: MobileFavoriteButtonProps) => {

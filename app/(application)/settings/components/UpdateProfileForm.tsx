@@ -5,6 +5,7 @@ import useUserStore from "@/stores/user";
 import { Logos, Profile } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Pencil } from "lucide-react";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
   const {user} = useUserStore()
   const { selectedProfile } = useProfileStore();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(profile?.profileName);
   const [logoUrl, setLogoUrl] = useState(profile?.profileImg);
   const supabase = createClientComponentClient();
@@ -65,7 +66,7 @@ const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
                   key={logo.id}
                   className={`flex items-center ${logo.logoUrl === logoUrl ? 'border-5 p-1 border-white' : 'border-none'}  justify-center text-white  md:w-28 md:h-28 lg:h-28 w-full h-full lg:w-full overflow-hidden border-2 border-transparent rounded-md group-hover:cursor-pointer group-hover:border-white group-hover:transition`}
                 >
-                  <img src={logo.logoUrl} alt="" />
+                  <Image width={200} height={200} src={logo.logoUrl} alt="" />
                 </div>
               );
             })}

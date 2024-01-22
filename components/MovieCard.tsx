@@ -7,6 +7,7 @@ import { Movie, LikeMovie } from "@/types/index";
 import { useRouter } from "next/navigation";
 import { useMovieUrlContext } from "@/context/MovieContext";
 import FavoriteButton from "./FavoriteButton";
+import Image from "next/image";
 
 interface MovieCardProps {
   movie: Movie;
@@ -24,7 +25,9 @@ const MovieCard = ({ movie, likedMovie, liked }: MovieCardProps) => {
 
   return (
     <div className="group bg-zinc-900 col-span relative h-[150px] md:h-[12vw]">
-      <img
+      <Image
+      width={400}
+      height={400}
         onClick={() => router.push(`/watch/${movie.id}`)}
         src={movie.posterUrl}
         alt="Movie"
@@ -90,7 +93,9 @@ const MovieCard = ({ movie, likedMovie, liked }: MovieCardProps) => {
       group-hover:opacity-100
     "
       >
-        <img
+        <Image
+        width={400}
+        height={400}
           onClick={() => router.push(`/watch/${movie.id}`)}
           src={movie.posterUrl}
           alt="Movie"

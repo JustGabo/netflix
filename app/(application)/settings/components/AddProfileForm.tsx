@@ -5,6 +5,7 @@ import useUserStore from "@/stores/user";
 import { Logos } from "@/types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { PlusIcon } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 interface Props {
@@ -77,7 +78,7 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
                   key={logo.id}
                   className={`flex items-center ${logoUrl == logo.logoUrl ? 'border-5 p-1 border-white' : 'border-none'} justify-center text-white  md:w-28 md:h-28 lg:h-28 w-full h-full lg:w-full overflow-hidden border-2 border-transparent rounded-md group-hover:cursor-pointer group-hover:border-white group-hover:transition`}
                 >
-                  <img src={logo.logoUrl} alt="" />
+                  <Image width={200} height={200} src={logo.logoUrl} alt="" />
                 </button>
               );
             })}
