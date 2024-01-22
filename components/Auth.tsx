@@ -103,8 +103,6 @@ const Auth = () => {
 
     if (error) {
       console.log(error);
-    } else {
-      console.log(data);
     }
   };
 
@@ -116,7 +114,7 @@ const Auth = () => {
     <main className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <section className="w-full h-full bg-opacity-20 md:bg-opacity-50">
         <nav className="lg:px-12 px-6 bg-black/70 md:bg-transparent lg:py-5 py-8">
-          <Image width={200} height={200} src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
+          <Image width={150} height={150} src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
         </nav>
         <article className="flex justify-center">
           <div className="self-center md:w-[90%] md:h-auto h-[calc(100vh-80px)] w-full px-6 lg:px-12 py-5 lg:py-10 md:py-8 md:mt-2 bg-black md:rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-lg">
