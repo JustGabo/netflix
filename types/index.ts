@@ -26,3 +26,9 @@ export interface Movie {
     posterUrl: string
     genre: string
 }
+
+export interface Logos{
+    id: number,
+    created_at: string,
+    logoUrl: string
+}

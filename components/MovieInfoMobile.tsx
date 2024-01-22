@@ -10,15 +10,15 @@ const movieInfoMobile = async ({ id }: movieInfoMobileProps) => {
   const supabase = createClientComponentClient();
   // const [movie, setMovie] = useState<Movie | null>(null);
 
+
+  
+
   const { data, error } = await supabase
     .from("movies")
     .select("*")
     .eq("id", id)
     .single();
 
-  // useEffect(() => {
-  //   getMovie();
-  // }, []);
 
   return (
     <main className="flex flex-col gap-2">

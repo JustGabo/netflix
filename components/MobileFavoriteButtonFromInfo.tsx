@@ -1,11 +1,19 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import { BsHeartFill } from "react-icons/bs";
 
-const mobileFavoriteButton = () => {
+interface Props {
+  liked?: boolean
+}
+
+const mobileFavoriteButton = ({liked}: Props) => {
+  
+  const [isLiked, setIsLiked] = useState(liked? liked : false)
+
   return (
     <button className="bg-zinc-800 gap-2 p-2 rounded-md font-semibold text-white flex items-center justify-center">
       <BsHeartFill />
-      Add to list
+      {isLiked? "Remove from list" : 'Add to list'}
     </button>
   );
 };
