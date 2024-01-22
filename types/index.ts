@@ -32,3 +32,16 @@ export interface Logos{
     created_at: string,
     logoUrl: string
 }
+
+export interface LikeMovie {
+    created_at: string,
+    description: string,
+    duration: string,
+    favoriteOwner: string,
+    genre: string,
+    id: number,
+    movieId: number,
+    name: string,
+    posterUrl: string,
+    url: string
+}

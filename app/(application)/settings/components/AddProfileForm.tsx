@@ -17,6 +17,7 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
   const [name, setName] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
   const supabase = createClientComponentClient();
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleCreateProfile = async () => {
     if (name == "") {
@@ -34,15 +35,16 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
 
     if (status == 201) {
       router.refresh();
+      setIsOpen(false)
     }
   };
 
   return (
-    <main className="flex flex-col gap-5 w-full">
-      <Dialog>
+    <main className="flex flex-col w-full gap-5">
+      <Dialog defaultOpen={isOpen}>
         <DialogTrigger asChild>
         <button
-          // onClick={() => setVariant("create")}
+          onClick={() => setIsOpen(true)}
           className={` transition duration-200 text-center rounded-md border-2 cursor-pointer lg:w-32 lg:h-32 w-full h-24 flex items-center justify-center flex-col text-white`}
         >
           <PlusIcon className="" />
@@ -59,7 +61,7 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
               onChange={(e) => {
                 setName(e.target.value);
               }}
-              className="p-2 bg-zinc-800 border-none outline-none w-full rounded-md placeholder:text-sm text-white"
+              className="w-full p-2 text-white border-none rounded-md outline-none bg-zinc-800 placeholder:text-sm"
               type="text"
               placeholder="Write your new profile name"
             />
@@ -67,7 +69,7 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
         </section>
         <section className="flex flex-col gap-5">
           <h2 className="text-xl text-white">Choose your avatar</h2>
-          <article className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
+          <article className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-4">
             {logos.map((logo) => {
               return (
                 <button
@@ -82,7 +84,7 @@ const AddProfileForm: React.FC<Props> = ({ logos }) => {
           </article>
           <button
             onClick={() => handleCreateProfile()}
-            className="p-2 w-full bg-white font-semibold text-zinc-900 rounded-md"
+            className="w-full p-2 font-semibold bg-white rounded-md text-zinc-900"
           >
             Create
           </button>

@@ -1,14 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
-import { supabase } from "@/db/supabase";
-import { Movie } from "@/types";
+import { LikeMovie } from "@/types";
 import useProfileStore from "@/stores/profile";
 import Animation from "@/components/pulsates/MoviesAnimationLoading";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const FavoriteList = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<LikeMovie[]>([]);
   const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient()
 
   const { selectedProfile } = useProfileStore((set) => set);
 
@@ -17,6 +18,8 @@ const FavoriteList = () => {
       .from("favorites")
       .select("*")
       .eq("favoriteOwner", selectedProfile?.id);
+
+
     if (data) {
       setMovies(data);
       setLoading(false);
@@ -48,12 +51,12 @@ const FavoriteList = () => {
               <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
                 {movies?.map((movie) => {
                   return (
-                    <MovieCard key={movie.id} liked={true} movie={movie} />
+                    <MovieCard key={movie.id} movie={movie} liked={true} likedMovie={movie} />
                   );
                 })}
               </div>
             ) : (
-              <div className="flex mt-16 items-center justify-center w-full">
+              <div className="flex items-center justify-center w-full mt-16">
                 <h2 className="text-sm text-gray-500 ">
                   There is no favorite movies
                 </h2>

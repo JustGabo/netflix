@@ -5,21 +5,18 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BsHeartFill } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
-import { Movie } from "@/types/index";
+import { LikeMovie, Movie } from "@/types/index";
 
 interface FavoriteButtonProps {
   movie: Movie;
+  likedMovie?: LikeMovie;
   liked?: boolean;
 }
 
-const FavoriteButton = ({ movie, liked }: FavoriteButtonProps) => {
+const FavoriteButton = ({ movie, liked, likedMovie }: FavoriteButtonProps) => {
   const supabase = createClientComponentClient();
+  const [isLiked, setIsLiked] = useState(liked ? liked : false);
   const router = useRouter()
-  const [isLiked, setIsLiked] = useState(liked? liked: false);
-  const [likedMovies, setLikedMovies] = useState<Movie[] | null>();
-  const [currentProfileLikedSongs, setCurrentProfileLikedSongs] = useState<
-    Movie[] | null
-  >(null);
 
   const Icon = isLiked ? BsHeartFill : FaRegHeart;
 
@@ -36,19 +33,22 @@ const FavoriteButton = ({ movie, liked }: FavoriteButtonProps) => {
     }
   };
 
+
+
   const handleLike = async () => {
     if (isLiked) {
-      const {error, data} = await supabase
+      const { error, data } = await supabase
         .from("favorites")
         .delete()
+        .eq("movieId", likedMovie?.movieId)
         .eq("favoriteOwner", selectedProfile?.id)
-        .eq("movieId", movie.id);
-        if(error){
-          console.log(error)
-        }else{
-          setIsLiked(false)
-          console.log(data)
-        }
+        .single();
+      if (error) {
+        console.log(error);
+      } else {
+        setIsLiked(false);
+        router.refresh()
+      }
     } else {
       const { data, error } = await supabase.from("favorites").insert({
         favoriteOwner: selectedProfile?.id,
@@ -64,13 +64,14 @@ const FavoriteButton = ({ movie, liked }: FavoriteButtonProps) => {
         console.log(error);
       } else {
         setIsLiked(true);
+        router.refresh()
       }
     }
   };
 
-  useEffect(() => {
-    gettingLikedMovie();
-  }, []);
+  useEffect(()=>{
+    gettingLikedMovie()
+  },[])
 
   return (
     <div

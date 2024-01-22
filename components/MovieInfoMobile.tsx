@@ -26,16 +26,16 @@ const movieInfoMobile = async ({ id }: movieInfoMobileProps) => {
         <img src={data?.posterUrl} alt="moviePoster" className="object-cover" />
       </section>
       
-      <section className="flex flex-col p-2 gap-3">
+      <section className="flex flex-col gap-3 p-2">
         <div>
-          <span className="text-green-400 text-sm font-semibold">New</span>
-        <h2 className="text-white text-xl font-semibold">{data?.name}</h2>
+          <span className="text-sm font-semibold text-green-400">New</span>
+        <h2 className="text-xl font-semibold text-white">{data?.name}</h2>
         </div>
         <article className="flex flex-col gap-3">
            <MobilePlayButton id={data?.id}/>
-          <MobileFavoriteButton/>
+          <MobileFavoriteButton movie={data}/>
         </article>
-        <p className="text-white mt-2 text-sm">{data?.description}</p>
+        <p className="mt-2 text-sm text-white">{data?.description}</p>
       </section>
     </main>
   );

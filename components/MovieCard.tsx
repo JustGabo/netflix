@@ -3,17 +3,18 @@ import { ChevronDown, PlayCircle, PlayCircleIcon } from "lucide-react";
 import React, { useState } from "react";
 import { BsPlayFill } from "react-icons/bs";
 
-import { Movie } from "@/types/index";
+import { Movie, LikeMovie } from "@/types/index";
 import { useRouter } from "next/navigation";
 import { useMovieUrlContext } from "@/context/MovieContext";
 import FavoriteButton from "./FavoriteButton";
 
 interface MovieCardProps {
   movie: Movie;
+  likedMovie?: LikeMovie;
   liked?: boolean
 }
 
-const MovieCard = ({ movie, liked }: MovieCardProps) => {
+const MovieCard = ({ movie, likedMovie, liked }: MovieCardProps) => {
   const router = useRouter();
   const { setUrl, setName } = useMovieUrlContext();
   const [loading, setLoading] = useState(false);
@@ -120,7 +121,7 @@ const MovieCard = ({ movie, liked }: MovieCardProps) => {
               <BsPlayFill className="w-6 h-6 text-black" />
             </div>
 
-            <FavoriteButton movie={movie} liked={liked} />
+            <FavoriteButton movie={movie} likedMovie={likedMovie} liked={liked} />
             <div
               onClick={() => {}}
               className="flex items-center justify-center w-6 h-6 ml-auto transition border-2 border-white rounded-full cursor-pointer group/item lg:w-10 lg:h-10 hover:border-neutral-300"

@@ -15,33 +15,28 @@ interface Props {
 const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
   const {user} = useUserStore()
   const { selectedProfile } = useProfileStore();
-  const [newUser, setNewUser] = useState({
-    name: selectedProfile?.profileName,
-    logo: "",
-  });
+  const [isOpen, setIsOpen] = useState(true);
   const [name, setName] = useState(profile?.profileName);
   const [logoUrl, setLogoUrl] = useState(profile?.profileImg);
   const supabase = createClientComponentClient();
 
   const handleUpdate = async () => {
-    const result = await supabase.from("profiles").update({
+    const {error} = await supabase.from("profiles").update({
       profileName: name,
       profileImg: logoUrl
     }).eq('ownerId', user?.id).eq('id', selectedProfile?.id)
-    console.log(result)
-  };
-
-  const handleLogo = (logoUrl: string) => {
-    setLogoUrl(logoUrl);
+    if(!error){
+      setIsOpen(false)
+    }
   };
 
   useEffect(() => {}, []);
 
   return (
-    <main className="flex flex-col gap-5 w-full">
-      <Dialog>
+    <main className="flex flex-col w-full gap-5">
+      <Dialog defaultOpen={isOpen}>
         <DialogTrigger asChild>
-          <div className="md:mt-1 flex cursor-pointer justify-center items-center gap-1  mt-2 text-base  md:text-base lg:text-lg text-center text-gray-400 group-hover:text-white group-hover:transition">
+          <div className="flex items-center justify-center gap-1 mt-2 text-base text-center text-gray-400 cursor-pointer md:mt-1 md:text-base lg:text-lg group-hover:text-white group-hover:transition">
             {profile.profileName}
             <Pencil className="w-3 h-3 lg:h-4 lg:w-4" />
           </div>
@@ -54,7 +49,7 @@ const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
           <form action="">
             <input
             onChange={(e)=> setName(e.target.value)}
-              className="p-2 bg-zinc-800 border-none outline-none w-full rounded-md placeholder:text-sm text-white"
+              className="w-full p-2 text-white border-none rounded-md outline-none bg-zinc-800 placeholder:text-sm"
               type="text"
               value={name}
             />
@@ -62,7 +57,7 @@ const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
         </section>
         <section className="flex flex-col gap-5">
           <h2 className="text-xl text-white">Choose a new avatar</h2>
-          <article className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
+          <article className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-4">
             {logos.map((logo) => {
               return (
                 <div
@@ -75,7 +70,7 @@ const UpdateProfileForm: React.FC<Props> = ({ logos,profile }) => {
               );
             })}
           </article>
-          <button onClick={()=> handleUpdate()} className="p-2 w-full bg-zinc-300 text-zinc-900 rounded-md">
+          <button onClick={()=> handleUpdate()} className="w-full p-2 rounded-md bg-zinc-300 text-zinc-900">
             Update
           </button>
         </section>

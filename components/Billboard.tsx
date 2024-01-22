@@ -1,12 +1,14 @@
-import { supabase } from "@/db/supabase";
 import { InfoIcon, PlusCircleIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import GoToMovieFromModal from "./GoToMovieFromModal";
 import BilboardMenuMovile from "./BilboardMenuMovile";
 import { BsPlayFill } from "react-icons/bs";
 import { redirect } from "next/navigation";
+import {cookies} from 'next/headers'
+import { createClientComponentClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Billboard = async () => {
+  const supabase = createServerComponentClient({cookies})
   const { data, error } = await supabase.from("movies").select("*");
 
   let randomMovie = data![Math.floor(Math.random() * data!.length)];
@@ -38,7 +40,7 @@ const Billboard = async () => {
           <GoToMovieFromModal width={36} id={randomMovie.id}/>
           <Dialog>
             <DialogTrigger asChild>
-              <button className="flex flex-row items-center w-auto px-2 py-1  font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
+              <button className="flex flex-row items-center w-auto px-2 py-1 font-semibold text-white transition bg-white rounded-md bg-opacity-30 md:py-2 md:px-4 lg:text-lg hover:opacity-20">
                 <InfoIcon className="mr-1 text-white" />
                 More info
               </button>
