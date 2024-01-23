@@ -18,7 +18,7 @@ const NavBarRightSide = () => {
   return (
     <div className="relative flex flex-row items-center gap-2 cursor-pointer">
       <div className="w-6 h-6 overflow-hidden rounded-sm lg:w-10 lg:h-10">
-        <Image width={200} height={200} src={selectedProfile?.profileImg!} alt="" />
+        <Image width={100} height={100} src={selectedProfile?.profileImg!} alt="" />
       </div>
       
       <AccountMenu />
