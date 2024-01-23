@@ -20,7 +20,7 @@ const Auth = () => {
   const [defaultImg, setDefaultImg] = useState("");
   const [waitingConfirmation, setWaitingConfirmation] = useState(false);
   const { setUser } = useUserStore((set) => set);
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   const [variant, setVariant] = useState("login");
 
@@ -56,7 +56,7 @@ const Auth = () => {
       password,
     });
     if (error) {
-      setError("Invalid credentials")
+      setError("Invalid credentials");
     }
     if (user) {
       setUser(user);
@@ -84,7 +84,7 @@ const Auth = () => {
         ownerEmail: email,
       });
       if (result.error) {
-        return result.error
+        return result.error;
       }
       creatingUser();
     } else {
@@ -114,9 +114,15 @@ const Auth = () => {
     <main className="relative h-screen w-full  bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <section className="w-full h-full bg-opacity-20 md:bg-opacity-50">
         <nav className="lg:px-12 px-6 bg-black/70 md:bg-transparent lg:py-5 py-8">
-          <Image width={150} height={150} src="/images/logo.png" className="h-6 md:h-12" alt="Logo" />
+          <Image
+            width={150}
+            height={150}
+            src="/images/logo.png"
+            className="h-6 md:h-12"
+            alt="Logo"
+          />
         </nav>
-        <article className="flex justify-center">
+        <article className="flex flex-col justify-center relative">
           <div className="self-center md:w-[90%] md:h-auto h-[calc(100vh-80px)] w-full px-6 lg:px-12 py-5 lg:py-10 md:py-8 md:mt-2 bg-black md:rounded-md bg-opacity-70 lg:w-2/5 lg:max-w-lg">
             <h2 className="mb-8 text-2xl md:text-4xl  font-semibold text-white">
               {variant === "login" ? "Sign in" : "Register"}
@@ -177,17 +183,27 @@ const Auth = () => {
                 {variant === "login" ? "Create an account" : "Login"}
               </span>
             </p>
+            {error && (
+              <div className="lg:w-full w-[100%]  flex lg:hidden bottom-0 md:w-[90%] m-auto md:mt-2 p-5 mt-5 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+                <span className="text-red-500">{error}</span>
+              </div>
+            )}
+            {waitingConfirmation && (
+              <div className="lg:w-full w-[100%] md:w-[80%] flex lg:hidden   m-auto md:mt-2 p-5 mt-5 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+                <span className="text-green-500">
+                  Please confirm your email address to continue
+                </span>
+              </div>
+            )}
           </div>
         </article>
         {error && (
-          <div className="lg:w-full w-[80%] md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
-            <span className="text-red-500">
-              {error}
-            </span>
+          <div className="lg:w-full w-[80%]  hidden lg:flex bottom-0 md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+            <span className="text-red-500">{error}</span>
           </div>
         )}
         {waitingConfirmation && (
-          <div className="lg:w-full w-[80%] md:w-[90%] m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
+          <div className="lg:w-full w-[80%] md:w-[80%] hidden lg:flex  m-auto md:mt-2 p-5 mt-0 bg-zinc-900/70 md:bg-black/70  rounded-md md:p-7  text-xs md:text-base   lg:max-w-lg">
             <span className="text-green-500">
               Please confirm your email address to continue
             </span>
