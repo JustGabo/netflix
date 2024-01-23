@@ -38,7 +38,8 @@ const MovieInfoMobile =  ({ id }: movieInfoMobileProps) => {
 
   return (
     <main className="flex flex-col gap-2">
-      <section className="w-full relative">
+      <section className="relative w-full">
+        <div className="absolute flex items-center justify-center w-full h-full bg-zinc-900/60 ">
         <div
           onClick={() => {
             setUrl(movie?.url!);
@@ -50,6 +51,7 @@ const MovieInfoMobile =  ({ id }: movieInfoMobileProps) => {
           } w-12 h-12 bg-zinc-900/80 lg:hidden border border-white md:border-none md:bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300`}
         >
           <BsPlayFill className="w-6 h-6 text-white md:text-black" />
+        </div>
         </div>
         <Image
           width={500}
